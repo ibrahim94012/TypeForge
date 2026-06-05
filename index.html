@@ -611,72 +611,58 @@ const firebaseConfig = {
 
 <script>
 /* ═══════════════════════════════════════════
-   FIREBASE DYNAMIC LOADER
+   FIREBASE — HARDCODED CONFIG (REALTIME DB)
 ═══════════════════════════════════════════ */
 let firebaseReady=false, currentUser=null;
 
-function getSavedConfig(){try{const r=localStorage.getItem('tf-fb-cfg');return r?JSON.parse(r):null;}catch(e){return null;}}
+const FIREBASE_CONFIG={
+  apiKey:"AIzaSyD-yIZEYUQcbZ2l0ElK0JfZI-u4CJAlMGI",
+  authDomain:"typeforge-b43f4.firebaseapp.com",
+  databaseURL:"https://typeforge-b43f4-default-rtdb.firebaseio.com",
+  projectId:"typeforge-b43f4",
+  storageBucket:"typeforge-b43f4.firebasestorage.app",
+  messagingSenderId:"119111463431",
+  appId:"1:119111463431:web:9bce40a690615541e4b0a2",
+  measurementId:"G-WGQZDVTD9B"
+};
 
-async function initFirebase(cfg){
+async function initFirebase(){
   try{
-    const [{initializeApp},{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged},{getFirestore,doc,setDoc,getDoc,collection,addDoc,query,orderBy,limit,getDocs,serverTimestamp}]=await Promise.all([
+    const [{initializeApp},{getAuth,GoogleAuthProvider,signInWithPopup,signOut,onAuthStateChanged},{getDatabase,ref,set,get,push,query,orderByChild,limitToLast}]=await Promise.all([
       import('https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js'),
       import('https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js'),
-      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js')
+      import('https://www.gstatic.com/firebasejs/10.12.0/firebase-database.js')
     ]);
-    const app=initializeApp(cfg);const auth=getAuth(app);const db=getFirestore(app);const provider=new GoogleAuthProvider();
-    window._fb={auth,db,provider,signInWithPopup,signOut,onAuthStateChanged,doc,setDoc,getDoc,collection,addDoc,query,orderBy,limit,getDocs,serverTimestamp};
+    const app=initializeApp(FIREBASE_CONFIG);
+    const auth=getAuth(app);
+    const db=getDatabase(app);
+    const provider=new GoogleAuthProvider();
+    window._fb={auth,db,provider,signInWithPopup,signOut,onAuthStateChanged,ref,set,get,push,query,orderByChild,limitToLast};
     onAuthStateChanged(auth,u=>window.onUserChange(u));
     firebaseReady=true;
-    const bar=document.getElementById('fb-bar');bar.classList.add('ok');bar.onclick=null;
-    document.getElementById('fb-bar-txt').textContent='🔥 Firebase সংযুক্ত আছে';
-    document.getElementById('fb-settings-btn').style.display='flex';
+    const bar=document.getElementById('fb-bar');
+    if(bar){bar.classList.add('ok');bar.onclick=null;document.getElementById('fb-bar-txt').textContent='🔥 Firebase সংযুক্ত আছে';}
+    const settBtn=document.getElementById('fb-settings-btn');
+    if(settBtn)settBtn.style.display='flex';
+    console.log('Firebase Realtime DB ready ✓');
     return true;
-  }catch(e){showToast('Firebase Error: '+e.message,4000);return false;}
+  }catch(e){console.error('Firebase Error:',e);showToast('Firebase Error: '+e.message,4000);return false;}
 }
 
-function fbTab(t){
-  ['f','p'].forEach(x=>document.getElementById('tab-'+x).classList.toggle('active',x===t[0]));
-  document.getElementById('view-f').style.display=t==='fields'?'block':'none';
-  document.getElementById('view-p').style.display=t==='paste'?'block':'none';
-}
-function fbOpen(){document.getElementById('fb-overlay').style.display='flex';fbLoadSaved(true);}
-function fbClose(){document.getElementById('fb-overlay').style.display='none';}
-function fbBarClick(){if(!firebaseReady)fbOpen();}
-function fbSkip(){fbClose();showToast('Firebase ছাড়া চলছে — স্কোর সেভ হবে না',3000);}
-function fbLoadSaved(silent){
-  const cfg=getSavedConfig();
-  if(!cfg){if(!silent)showToast('কোনো সেভ করা config নেই',2000);return;}
-  ['apiKey','projectId','authDomain','storageBucket'].forEach(k=>document.getElementById('fc-'+k).value=cfg[k]||'');
-  document.getElementById('fc-senderId').value=cfg.messagingSenderId||'';
-  document.getElementById('fc-appId').value=cfg.appId||'';
-  if(!silent)showToast('✓ Saved config লোড হয়েছে',2000);
-}
-function parseConfig(str){
-  str=str.trim().replace(/^[\s\S]*?=\s*/,'').replace(/;[\s]*$/,'').trim();
-  str=str.replace(/'/g,'"').replace(/([{,]\s*)([a-zA-Z_]\w*)\s*:/g,'$1"$2":');
-  return JSON.parse(str);
-}
-async function fbApply(){
-  let cfg={};
-  const isPaste=document.getElementById('tab-p').classList.contains('active');
-  if(isPaste){
-    const txt=document.getElementById('fc-json').value.trim();
-    if(!txt){showToast('⚠️ Config paste করুন',2500);return;}
-    try{cfg=parseConfig(txt);}catch(e){showToast('⚠️ Format ঠিক নেই: '+e.message,4000);return;}
-  } else {
-    cfg={apiKey:document.getElementById('fc-apiKey').value.trim(),projectId:document.getElementById('fc-projectId').value.trim(),authDomain:document.getElementById('fc-authDomain').value.trim(),storageBucket:document.getElementById('fc-storageBucket').value.trim(),messagingSenderId:document.getElementById('fc-senderId').value.trim(),appId:document.getElementById('fc-appId').value.trim()};
-  }
-  if(!cfg.authDomain&&cfg.projectId)cfg.authDomain=cfg.projectId+'.firebaseapp.com';
-  if(!cfg.storageBucket&&cfg.projectId)cfg.storageBucket=cfg.projectId+'.appspot.com';
-  if(!cfg.apiKey||!cfg.projectId){showToast('⚠️ apiKey ও projectId আবশ্যক',2500);return;}
-  showToast('Firebase সংযোগ করছি...',2000);
-  const done=await initFirebase(cfg);
-  if(done){localStorage.setItem('tf-fb-cfg',JSON.stringify(cfg));fbClose();showToast('🔥 Firebase সংযুক্ত হয়েছে!',3000);}
-}
+/* stub UI helpers so old calls don't crash */
+function fbTab(){}
+function fbOpen(){showToast('Firebase ইতিমধ্যে সংযুক্ত আছে 🔥',2500);}
+function fbClose(){const o=document.getElementById('fb-overlay');if(o)o.style.display='none';}
+function fbBarClick(){if(!firebaseReady)showToast('Firebase লোড হচ্ছে...',2000);}
+function fbSkip(){showToast('Firebase সবসময় চালু থাকে।',2500);}
+function fbLoadSaved(){}
+function fbApply(){showToast('Firebase এখন হার্ডকোড করা।',2500);}
+
 window.addEventListener('DOMContentLoaded',async()=>{
-  const saved=getSavedConfig();
-  if(saved&&saved.apiKey&&!saved.apiKey.startsWith('YOUR')){document.getElementById('fb-overlay').style.display='none';await initFirebase(saved);}
+  /* hide setup overlay/bar immediately */
+  const overlay=document.getElementById('fb-overlay');
+  if(overlay)overlay.style.display='none';
+  await initFirebase();
 });
 
 /* ═══════════════════════════════════════════
@@ -727,7 +713,7 @@ window.onUserChange=function(user){
 function toggleDD(){document.getElementById('user-menu')?.classList.toggle('open');}
 document.addEventListener('click',e=>{const m=document.getElementById('user-menu');if(m&&!m.contains(e.target))m.classList.remove('open');});
 async function signInGoogle(){
-  if(!window._fb){showToast('⚠️ আগে Firebase সেটআপ করুন!',3000);setTimeout(fbOpen,600);return;}
+  if(!window._fb){showToast('⚠️ Firebase লোড হচ্ছে, একটু অপেক্ষা করুন...',3000);return;}
   try{await window._fb.signInWithPopup(window._fb.auth,window._fb.provider);closeModal();}
   catch(e){showToast('লগইন ব্যর্থ: '+e.message,3000);}
 }
@@ -739,33 +725,41 @@ function closeModal(){document.getElementById('login-modal').classList.remove('s
 ═══════════════════════════════════════════ */
 async function saveUserProfile(user){
   if(!window._fb)return;
-  const {db,doc,setDoc,serverTimestamp}=window._fb;
-  try{await setDoc(doc(db,'users',user.uid),{name:user.displayName,email:user.email,photo:user.photoURL||'',updatedAt:serverTimestamp()},{merge:true});}catch(e){}
+  const {db,ref,set}=window._fb;
+  try{await set(ref(db,'users/'+user.uid),{name:user.displayName,email:user.email,photo:user.photoURL||'',updatedAt:Date.now()});}catch(e){console.error('saveUserProfile:',e);}
 }
 async function saveResult(wpm,acc,lv){
   if(!window._fb||!currentUser)return false;
-  const {db,collection,addDoc,doc,getDoc,setDoc,serverTimestamp}=window._fb;
+  const {db,ref,set,get,push}=window._fb;
   try{
-    await addDoc(collection(db,'results'),{uid:currentUser.uid,name:currentUser.displayName,photo:currentUser.photoURL||'',wpm,acc,level:lv,mode:gameMode,createdAt:serverTimestamp()});
-    const pbRef=doc(db,'personal_bests',currentUser.uid+'_'+lv);
-    const pbSnap=await getDoc(pbRef);
-    if(!pbSnap.exists()||pbSnap.data().wpm<wpm)await setDoc(pbRef,{uid:currentUser.uid,name:currentUser.displayName,photo:currentUser.photoURL||'',wpm,acc,level:lv,updatedAt:serverTimestamp()});
+    /* push new result under results/{uid}/ */
+    const newRef=await push(ref(db,'results/'+currentUser.uid),{uid:currentUser.uid,name:currentUser.displayName,photo:currentUser.photoURL||'',wpm,acc,level:lv,mode:gameMode,createdAt:Date.now()});
+    /* update personal best if better */
+    const pbRef=ref(db,'personal_bests/'+currentUser.uid+'_'+lv);
+    const pbSnap=await get(pbRef);
+    if(!pbSnap.exists()||pbSnap.val().wpm<wpm){
+      await set(pbRef,{uid:currentUser.uid,name:currentUser.displayName,photo:currentUser.photoURL||'',wpm,acc,level:lv,updatedAt:Date.now()});
+    }
     return true;
-  }catch(e){return false;}
+  }catch(e){console.error('saveResult:',e);return false;}
 }
 async function loadLeaderboard(lv,btn){
   if(btn){document.querySelectorAll('.lb-tab').forEach(b=>b.classList.remove('active'));btn.classList.add('active');}
   const list=document.getElementById('lb-list');
   list.innerHTML='<div class="lb-loading">Loading...</div>';
-  if(!window._fb){list.innerHTML='<div class="lb-empty">⚠️ Firebase নেই। <span style="color:var(--accent);cursor:pointer" onclick="fbOpen()">সেটআপ →</span></div>';return;}
-  const {db,collection,query,orderBy,limit,getDocs}=window._fb;
+  if(!window._fb){list.innerHTML='<div class="lb-empty">⚠️ Firebase লোড হচ্ছে, একটু অপেক্ষা করুন...</div>';return;}
+  const {db,ref,get,query,orderByChild,limitToLast}=window._fb;
   try{
-    const q=query(collection(db,'personal_bests'),orderBy('wpm','desc'),limit(20));
-    const snap=await getDocs(q);
-    const all=[];snap.forEach(d=>{if(d.data().level===lv)all.push(d.data());});
-    if(!all.length){list.innerHTML='<div class="lb-empty">এখনো কোনো স্কোর নেই।</div>';return;}
+    const pbRef=ref(db,'personal_bests');
+    const snap=await get(query(pbRef,orderByChild('wpm'),limitToLast(50)));
+    const all=[];
+    if(snap.exists()){snap.forEach(child=>{const d=child.val();if(d.level===lv)all.push(d);});}
+    /* sort desc */
+    all.sort((a,b)=>b.wpm-a.wpm);
+    const top=all.slice(0,20);
+    if(!top.length){list.innerHTML='<div class="lb-empty">এখনো কোনো স্কোর নেই।</div>';return;}
     const medals=['gold','silver','bronze'];
-    list.innerHTML=all.map((r,i)=>{
+    list.innerHTML=top.map((r,i)=>{
       const isMe=currentUser&&r.uid===currentUser.uid;
       const av=r.photo?`<img class="lb-avatar" src="${r.photo}" alt="" onerror="this.style.display='none'">`:`<div class="lb-avatar-placeholder">${(r.name||'?')[0]}</div>`;
       return `<div class="lb-row${isMe?' me':''}"><div class="lb-rank ${medals[i]||''}">${i===0?'🥇':i===1?'🥈':i===2?'🥉':i+1}</div>${av}<div class="lb-info"><div class="lb-name">${r.name||'Anonymous'}${isMe?' (আপনি)':''}</div><div class="lb-lv">${lv}</div></div><div style="text-align:right"><div class="lb-wpm">${r.wpm}</div><div class="lb-acc">${r.acc}% acc</div></div></div>`;
@@ -777,11 +771,11 @@ async function loadMyStats(){
   if(!currentUser||!window._fb){grid.innerHTML='<div class="lb-empty">লগইন করুন।</div>';return;}
   title.textContent='📊 '+currentUser.displayName+'-এর Statistics';
   grid.innerHTML='<div class="lb-loading">Loading...</div>';
-  const {db,collection,query,orderBy,limit,getDocs}=window._fb;
+  const {db,ref,get}=window._fb;
   try{
-    const q=query(collection(db,'results'),orderBy('createdAt','desc'),limit(100));
-    const snap=await getDocs(q);
-    let all=[];snap.forEach(d=>{if(d.data().uid===currentUser.uid)all.push(d.data());});
+    const snap=await get(ref(db,'results/'+currentUser.uid));
+    let all=[];
+    if(snap.exists()){snap.forEach(child=>{all.push(child.val());});}
     if(!all.length){grid.innerHTML='<div class="lb-empty">এখনো কোনো টেস্ট দেননি।</div>';return;}
     const best=all.reduce((a,b)=>a.wpm>b.wpm?a:b);
     const avg=Math.round(all.reduce((s,r)=>s+r.wpm,0)/all.length);

@@ -54,7 +54,7 @@ body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min
 .bg-glow{position:fixed;inset:0;pointer-events:none;z-index:0;background:radial-gradient(ellipse 55% 40% at 15% 15%,var(--glow1) 0%,transparent 65%),radial-gradient(ellipse 45% 35% at 85% 85%,var(--glow2) 0%,transparent 65%);}
 
 /* ── LAYOUT ── */
-.container{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:2rem 1.5rem 6rem;}
+.container{position:relative;z-index:1;max-width:960px;margin:0 auto;padding:2rem 1.5rem 3rem;}
 
 /* ── HEADER ── */
 header{display:flex;align-items:center;justify-content:space-between;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);flex-wrap:wrap;gap:1rem;}
@@ -176,7 +176,9 @@ kbd{font-family:'Space Mono',monospace;font-size:.58rem;background:var(--kbd-bg)
 /* ══════════════════════════════════
    KEYBOARD ANIMATION
 ══════════════════════════════════ */
-.keyboard-wrap{margin-bottom:1.5rem;padding:1.5rem 1.5rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:20px;position:relative;overflow:hidden;}
+.keyboard-wrap{margin-bottom:1.5rem;padding:1.5rem 1.5rem 1rem;background:var(--panel);border:1px solid var(--border);border-radius:20px;position:relative;overflow:hidden;transition:all .35s;}
+.keyboard-wrap.kb-hidden{display:none;}
+#kb-toggle-btn.kb-active{background:var(--panel2);color:var(--accent);border-color:var(--accent);}
 .keyboard-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 40% at 50% 100%,var(--glow1),transparent);pointer-events:none;}
 .kb-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;}
 .kb-title{font-family:'Space Mono',monospace;font-size:.58rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);}
@@ -285,50 +287,7 @@ kbd{font-family:'Space Mono',monospace;font-size:.58rem;background:var(--kbd-bg)
 .toast{position:fixed;bottom:2.5rem;left:50%;transform:translateX(-50%) translateY(16px);background:var(--panel2);border:1px solid var(--border2);border-radius:100px;padding:10px 22px;font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.06em;color:var(--text2);opacity:0;transition:all .3s;pointer-events:none;z-index:9990;white-space:nowrap;box-shadow:0 4px 20px var(--shadow);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
-/* ══ FIREBASE CONFIG MODAL ══ */
-.fb-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.88);z-index:1000;display:flex;align-items:center;justify-content:center;padding:1rem;}
-.fb-modal{background:var(--panel);border:1px solid rgba(127,255,110,0.18);border-radius:24px;padding:2rem;max-width:580px;width:100%;box-shadow:0 32px 80px rgba(0,0,0,0.7);animation:popIn .35s cubic-bezier(.16,1,.3,1);max-height:90vh;overflow-y:auto;}
-.fb-head{display:flex;align-items:center;gap:12px;margin-bottom:1.5rem;}
-.fb-fire{width:42px;height:42px;display:flex;align-items:center;justify-content:center;font-size:1.4rem;background:rgba(255,152,0,.1);border:1px solid rgba(255,152,0,.25);border-radius:12px;flex-shrink:0;}
-.fb-head .title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);}
-.fb-head .sub{font-family:'Space Mono',monospace;font-size:.58rem;color:var(--text3);letter-spacing:.08em;text-transform:uppercase;margin-top:3px;}
-.fb-steps{display:flex;flex-direction:column;gap:5px;margin-bottom:1.5rem;}
-.fb-step{display:flex;align-items:flex-start;gap:10px;padding:8px 12px;border-radius:10px;background:var(--bg3);border:1px solid var(--border);}
-.fb-sn{font-family:'Space Mono',monospace;font-size:.58rem;font-weight:700;color:var(--accent);background:rgba(127,255,110,.1);border:1px solid rgba(127,255,110,.2);border-radius:6px;width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
-.fb-st{font-family:'DM Sans',sans-serif;font-size:.78rem;color:var(--text2);line-height:1.45;}
-.fb-st a{color:var(--accent);text-decoration:none;cursor:pointer;}
-.fb-tabs{display:flex;gap:4px;margin-bottom:1rem;}
-.fb-tab{font-family:'Space Mono',monospace;font-size:.6rem;letter-spacing:.06em;text-transform:uppercase;padding:5px 13px;border-radius:100px;border:1px solid var(--border);background:transparent;color:var(--text3);cursor:pointer;transition:all .2s;}
-.fb-tab.active{background:var(--panel2);color:var(--text);border-color:var(--border2);}
-.fb-fields{display:flex;flex-direction:column;gap:8px;margin-bottom:1.25rem;}
-.fb-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-.fb-field{display:flex;flex-direction:column;gap:4px;}
-.fb-lbl{font-family:'Space Mono',monospace;font-size:.56rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
-.fb-input{background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:8px 12px;font-family:'Space Mono',monospace;font-size:.7rem;color:var(--text);outline:none;width:100%;transition:border-color .2s,box-shadow .2s;}
-.fb-input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(127,255,110,.08);}
-.fb-input::placeholder{color:var(--text3);}
-.fb-input.err{border-color:var(--wrong);}
-.fb-json{width:100%;min-height:110px;background:var(--bg3);border:1px solid var(--border2);border-radius:10px;padding:10px 12px;font-family:'Space Mono',monospace;font-size:.67rem;color:var(--text);outline:none;resize:vertical;line-height:1.5;transition:border-color .2s;margin-bottom:1.25rem;}
-.fb-json:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(127,255,110,.08);}
-.fb-json::placeholder{color:var(--text3);}
-.fb-actions{display:flex;gap:8px;}
-.fb-save{flex:1;padding:10px 18px;border-radius:100px;border:none;background:var(--accent);color:#051200;font-family:'Space Mono',monospace;font-size:.68rem;font-weight:700;letter-spacing:.07em;text-transform:uppercase;cursor:pointer;transition:all .2s;}
-.fb-save:hover{box-shadow:0 0 18px rgba(127,255,110,.4);}
-.fb-load{padding:10px 14px;border-radius:100px;border:1px solid var(--border2);background:transparent;color:var(--text2);font-family:'Space Mono',monospace;font-size:.63rem;text-transform:uppercase;cursor:pointer;transition:all .2s;white-space:nowrap;}
-.fb-load:hover{background:var(--panel2);color:var(--text);}
-.fb-skip{text-align:center;margin-top:.7rem;font-family:'Space Mono',monospace;font-size:.58rem;color:var(--text3);cursor:pointer;letter-spacing:.06em;text-transform:uppercase;transition:color .2s;}
-.fb-skip:hover{color:var(--text2);}
-
-/* ── STATUS BAR ── */
-.fb-bar{position:fixed;bottom:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:8px 16px;background:rgba(255,152,0,.07);border-top:1px solid rgba(255,152,0,.15);gap:10px;cursor:pointer;transition:all .2s;}
-.fb-bar:hover{background:rgba(255,152,0,.12);}
-.fb-bar.ok{background:rgba(127,255,110,.05);border-top-color:rgba(127,255,110,.12);cursor:default;}
-.fb-dot{width:7px;height:7px;border-radius:50%;background:#ff9800;flex-shrink:0;}
-.fb-bar.ok .fb-dot{background:var(--accent);animation:pulse 2s ease infinite;}
-.fb-bar-txt{font-family:'Space Mono',monospace;font-size:.6rem;color:#ff9800;letter-spacing:.05em;}
-.fb-bar.ok .fb-bar-txt{color:var(--accent);}
-.fb-bar-btn{font-family:'Space Mono',monospace;font-size:.56rem;color:rgba(255,152,0,.7);text-transform:uppercase;letter-spacing:.07em;padding:3px 10px;border-radius:100px;border:1px solid rgba(255,152,0,.3);background:transparent;cursor:pointer;transition:all .2s;}
-.fb-bar.ok .fb-bar-btn{color:rgba(127,255,110,.6);border-color:rgba(127,255,110,.25);}
+/* Firebase UI removed */
 
 /* ── RESPONSIVE ── */
 @media(max-width:680px){
@@ -354,60 +313,6 @@ kbd{font-family:'Space Mono',monospace;font-size:.58rem;background:var(--kbd-bg)
 <div id="cursor-ring"></div>
 <div class="bg-grid"></div>
 <div class="bg-glow"></div>
-
-<!-- ══ FIREBASE CONFIG ══ -->
-<div class="fb-overlay" id="fb-overlay">
-  <div class="fb-modal">
-    <div class="fb-head">
-      <div class="fb-fire">🔥</div>
-      <div>
-        <div class="title">Firebase সেটআপ করুন</div>
-        <div class="sub">লগইন ও লিডারবোর্ড ফিচার চালু করতে</div>
-      </div>
-    </div>
-    <div class="fb-steps">
-      <div class="fb-step"><div class="fb-sn">1</div><div class="fb-st"><a onclick="window.open('https://console.firebase.google.com','_blank')">console.firebase.google.com</a> → নতুন project তৈরি করুন</div></div>
-      <div class="fb-step"><div class="fb-sn">2</div><div class="fb-st">Authentication → Sign-in method → <strong>Google</strong> enable করুন</div></div>
-      <div class="fb-step"><div class="fb-sn">3</div><div class="fb-st">Firestore Database → Create database → Test mode</div></div>
-      <div class="fb-step"><div class="fb-sn">4</div><div class="fb-st">Project Settings → Your apps → Web app → Config কপি করুন</div></div>
-    </div>
-    <div class="fb-tabs">
-      <button class="fb-tab active" id="tab-f" onclick="fbTab('fields')">Field by Field</button>
-      <button class="fb-tab" id="tab-p" onclick="fbTab('paste')">Config Paste করুন</button>
-    </div>
-    <div id="view-f">
-      <div class="fb-fields">
-        <div class="fb-row">
-          <div class="fb-field"><div class="fb-lbl">API Key</div><input class="fb-input" id="fc-apiKey" placeholder="AIzaSy..." autocomplete="off"></div>
-          <div class="fb-field"><div class="fb-lbl">Project ID</div><input class="fb-input" id="fc-projectId" placeholder="my-project-id" autocomplete="off"></div>
-        </div>
-        <div class="fb-row">
-          <div class="fb-field"><div class="fb-lbl">Auth Domain</div><input class="fb-input" id="fc-authDomain" placeholder="project.firebaseapp.com" autocomplete="off"></div>
-          <div class="fb-field"><div class="fb-lbl">Storage Bucket</div><input class="fb-input" id="fc-storageBucket" placeholder="project.appspot.com" autocomplete="off"></div>
-        </div>
-        <div class="fb-row">
-          <div class="fb-field"><div class="fb-lbl">Messaging Sender ID</div><input class="fb-input" id="fc-senderId" placeholder="123456789" autocomplete="off"></div>
-          <div class="fb-field"><div class="fb-lbl">App ID</div><input class="fb-input" id="fc-appId" placeholder="1:123:web:abc..." autocomplete="off"></div>
-        </div>
-      </div>
-    </div>
-    <div id="view-p" style="display:none">
-      <textarea class="fb-json" id="fc-json" placeholder="Firebase Console থেকে config কপি করে এখানে paste করুন:
-
-const firebaseConfig = {
-  apiKey: &quot;AIzaSy...&quot;,
-  authDomain: &quot;project.firebaseapp.com&quot;,
-  projectId: &quot;my-project&quot;,
-  ...
-};"></textarea>
-    </div>
-    <div class="fb-actions">
-      <button class="fb-load" onclick="fbLoadSaved()">💾 Saved লোড</button>
-      <button class="fb-save" onclick="fbApply()">🔥 Firebase সংযুক্ত করুন</button>
-    </div>
-    <div class="fb-skip" onclick="fbSkip()">এখন না — Firebase ছাড়া খেলব</div>
-  </div>
-</div>
 
 <!-- ══ LOGIN MODAL ══ -->
 <div class="modal-overlay" id="login-modal">
@@ -439,8 +344,8 @@ const firebaseConfig = {
           <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
         </svg>
       </button>
-      <button class="icon-btn" id="fb-settings-btn" onclick="fbOpen()" title="Firebase Settings" style="display:none">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.57 14.86L22 13.43 20.57 12 17 15.57 8.43 7 12 3.43 10.57 2 9.14 3.43 7.71 2 5.57 4.14 4.14 2.71 2.71 4.14l1.43 1.43L2 7.71l1.43 1.43L2 10.57 3.43 12 7 8.43 15.57 17 12 20.57 13.43 22l1.43-1.43L16.29 22l2.14-2.14 1.43 1.43 1.43-1.43-1.43-1.43L22 16.29z"/></svg>
+      <button class="icon-btn kb-active" id="kb-toggle-btn" onclick="toggleKeyboard()" title="কীবোর্ড দেখাও/লুকাও">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><path d="M6 10h.01M10 10h.01M14 10h.01M18 10h.01M6 14h.01M10 14h.01M14 14h.01M18 14h.01"/><path d="M8 17h8"/></svg>
       </button>
       <div id="auth-area">
         <button class="auth-btn" onclick="signInGoogle()">
@@ -579,7 +484,7 @@ const firebaseConfig = {
       <div class="summary-item"><div class="summary-label">Avg WPM</div><div class="summary-val" id="avg-wpm">—</div></div>
       <div class="summary-item"><div class="summary-label">Final Accuracy</div><div class="summary-val" id="final-acc">—</div></div>
     </div>
-    <div class="save-badge" id="save-badge">✓ Firebase-এ সেভ হয়েছে!</div>
+    <div class="save-badge" id="save-badge">✓ স্কোর সেভ হয়েছে!</div>
   </div>
 
   <!-- LEADERBOARD -->
@@ -602,11 +507,7 @@ const firebaseConfig = {
   </div>
 </div>
 
-<div class="fb-bar" id="fb-bar" onclick="fbBarClick()">
-  <div class="fb-dot"></div>
-  <div class="fb-bar-txt" id="fb-bar-txt">🔥 Firebase সংযুক্ত নেই — ক্লিক করে সেটআপ করুন</div>
-  <button class="fb-bar-btn" onclick="event.stopPropagation();fbOpen()">Config করুন</button>
-</div>
+
 <div class="toast" id="toast"></div>
 
 <script>
@@ -640,10 +541,6 @@ async function initFirebase(){
     window._fb={auth,db,provider,signInWithPopup,signOut,onAuthStateChanged,ref,set,get,push,query,orderByChild,limitToLast};
     onAuthStateChanged(auth,u=>window.onUserChange(u));
     firebaseReady=true;
-    const bar=document.getElementById('fb-bar');
-    if(bar){bar.classList.add('ok');bar.onclick=null;document.getElementById('fb-bar-txt').textContent='🔥 Firebase সংযুক্ত আছে';}
-    const settBtn=document.getElementById('fb-settings-btn');
-    if(settBtn)settBtn.style.display='flex';
     console.log('Firebase Realtime DB ready ✓');
     return true;
   }catch(e){console.error('Firebase Error:',e);showToast('Firebase Error: '+e.message,4000);return false;}
@@ -659,10 +556,8 @@ function fbLoadSaved(){}
 function fbApply(){showToast('Firebase এখন হার্ডকোড করা।',2500);}
 
 window.addEventListener('DOMContentLoaded',async()=>{
-  /* hide setup overlay/bar immediately */
-  const overlay=document.getElementById('fb-overlay');
-  if(overlay)overlay.style.display='none';
   await initFirebase();
+  initKeyboardState();
 });
 
 /* ═══════════════════════════════════════════
@@ -684,6 +579,24 @@ function updateThemeIcon(){
 }
 updateThemeIcon();
 function toggleTheme(){theme=theme==='dark'?'light':'dark';document.documentElement.setAttribute('data-theme',theme);localStorage.setItem('tf-theme',theme);updateThemeIcon();if(chart)buildChart();}
+
+/* ── KEYBOARD TOGGLE ── */
+let kbVisible=localStorage.getItem('tf-kb-visible')!=='false';
+function initKeyboardState(){
+  const wrap=document.querySelector('.keyboard-wrap');
+  const btn=document.getElementById('kb-toggle-btn');
+  if(!wrap||!btn)return;
+  if(!kbVisible){wrap.classList.add('kb-hidden');btn.classList.remove('kb-active');}
+  else{wrap.classList.remove('kb-hidden');btn.classList.add('kb-active');}
+}
+function toggleKeyboard(){
+  kbVisible=!kbVisible;
+  localStorage.setItem('tf-kb-visible',String(kbVisible));
+  const wrap=document.querySelector('.keyboard-wrap');
+  const btn=document.getElementById('kb-toggle-btn');
+  if(kbVisible){wrap.classList.remove('kb-hidden');btn.classList.add('kb-active');showToast('🎹 কীবোর্ড দেখানো হচ্ছে');}
+  else{wrap.classList.add('kb-hidden');btn.classList.remove('kb-active');showToast('🎹 কীবোর্ড লুকানো হয়েছে');}
+}
 
 /* ═══════════════════════════════════════════
    AUTH
@@ -843,7 +756,16 @@ function appendEndlessWords(){
   }
   updateWordCount();
 }
-function calcWPM(){if(!startTime)return 0;const m=(Date.now()-startTime)/60000;if(!m)return 0;const c=typed.split('').filter((ch,i)=>ch===text[i]).length;return Math.round((c/5)/m);}
+function calcWPM(){
+  if(!startTime)return 0;
+  const m=(Date.now()-startTime)/60000;
+  if(!m)return 0;
+  // Count chars of completed words (more accurate than comparing typed string)
+  let correctChars=0;
+  for(let wi=0;wi<wordIndex;wi++) correctChars+=words[wi].length+1;
+  correctChars=Math.max(0,correctChars-1);
+  return Math.round((correctChars/5)/m);
+}
 function calcAcc(){if(!totalTyped)return 100;return Math.max(0,Math.round(((totalTyped-totalErrors)/totalTyped)*100));}
 function showToast(msg,dur=2200){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),dur);}
 function getGrade(wpm){if(wpm>=80)return{label:'S RANK — Exceptional',cls:'grade-s'};if(wpm>=60)return{label:'A RANK — Great',cls:'grade-a'};if(wpm>=40)return{label:'B RANK — Good',cls:'grade-b'};return{label:'C RANK — Keep Going',cls:'grade-c'};}
@@ -1004,6 +926,7 @@ document.getElementById('typing-input').addEventListener('keydown',function(e){
       pressKey(' ',true);
     }
     wordIndex++;this.value='';
+    typed=words.slice(0,wordIndex).join(' ');
     // Check end condition
     if(gameMode==='words'&&wordIndex>=wordCountTarget){endTest();return;}
     if(gameMode!=='endless'&&wordIndex>=words.length){endTest();return;}
@@ -1081,6 +1004,9 @@ async function endTest(){
   document.getElementById('progress-pct').textContent='100%';
   document.getElementById('typing-zone').classList.remove('running','focused');
   const finalWPM=calcWPM(),finalAcc=calcAcc();
+  // Ensure at least one data point exists for the chart
+  if(!wpmHistory.length){wpmHistory.push(finalWPM);timeHistory.push(gameMode==='timed'?timedDuration:elapsedSeconds);}
+  else{wpmHistory.push(finalWPM);timeHistory.push(gameMode==='timed'?timedDuration:elapsedSeconds);}
   updateStats(finalWPM,finalAcc,0,typed.replace(/ /g,'').length);
   const grade=getGrade(finalWPM);
   const badge=document.getElementById('grade-badge');badge.textContent=grade.label;badge.className='grade-badge '+grade.cls;
@@ -1097,7 +1023,6 @@ async function endTest(){
     if(saved){document.getElementById('save-badge').classList.add('show');showToast('Done! '+finalWPM+' WPM · সেভ হয়েছে 🔥',3000);}
   } else if(firebaseReady){
     showToast('Done! '+finalWPM+' WPM — লগইন করলে সেভ হবে',3000);
-    setTimeout(()=>document.getElementById('login-modal').classList.add('show'),1500);
   } else {
     showToast('Done! '+finalWPM+' WPM',2500);
   }
@@ -1128,7 +1053,9 @@ function buildChart(){
   if(chart){chart.destroy();chart=null;}
   const labels=timeHistory.length?timeHistory.map(t=>t+'s'):['0s'];
   const data=wpmHistory.length?wpmHistory:[0];
-  const ctx=document.getElementById('speed-chart').getContext('2d');
+  const canvasEl=document.getElementById('speed-chart');
+  if(!canvasEl)return;
+  const ctx=canvasEl.getContext('2d');
   const isDark=theme==='dark';const a=getAccent();
   const grad=ctx.createLinearGradient(0,0,0,220);
   grad.addColorStop(0,isDark?'rgba(127,255,110,.22)':'rgba(46,139,0,.15)');

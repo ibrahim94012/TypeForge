@@ -316,6 +316,186 @@ kbd{font-family:'Space Mono',monospace;font-size:.58rem;background:var(--kbd-bg)
 .toast{position:fixed;bottom:2.5rem;left:50%;transform:translateX(-50%) translateY(16px);background:var(--panel2);border:1px solid var(--border2);border-radius:100px;padding:10px 22px;font-family:'Space Mono',monospace;font-size:.68rem;letter-spacing:.06em;color:var(--text2);opacity:0;transition:all .3s;pointer-events:none;z-index:9990;white-space:nowrap;box-shadow:0 4px 20px var(--shadow);}
 .toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
 
+/* ══════════════════════════════════════
+   🫀 HEARTBEAT RHYTHM VISUALIZER
+══════════════════════════════════════ */
+.rhythm-wrap{margin-bottom:1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1rem 1.25rem;position:relative;overflow:hidden;}
+.rhythm-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.6rem;}
+.rhythm-title{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);display:flex;align-items:center;gap:6px;}
+.rhythm-bpm{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:var(--accent);}
+#rhythm-canvas{width:100%;height:52px;display:block;}
+.rhythm-status{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.08em;color:var(--text3);margin-top:.35rem;}
+.rhythm-status span{color:var(--accent2);}
+
+/* ══════════════════════════════════════
+   🧠 FINGER HEATMAP
+══════════════════════════════════════ */
+.heatmap-wrap{margin-bottom:1.25rem;background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1rem 1.25rem;}
+.heatmap-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:.8rem;}
+.heatmap-title{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);}
+.heatmap-legend{display:flex;align-items:center;gap:6px;font-family:'Space Mono',monospace;font-size:.5rem;color:var(--text3);}
+.heatmap-legend-bar{width:48px;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--panel2),var(--accent));}
+.finger-grid{display:flex;gap:8px;justify-content:center;align-items:flex-end;}
+.finger-col{display:flex;flex-direction:column;align-items:center;gap:4px;}
+.finger-bar-wrap{width:28px;height:60px;background:var(--panel2);border-radius:6px;overflow:hidden;position:relative;border:1px solid var(--border);}
+.finger-bar{position:absolute;bottom:0;left:0;right:0;border-radius:4px;transition:height .4s ease,background .4s ease;}
+.finger-label{font-family:'Space Mono',monospace;font-size:.45rem;color:var(--text3);letter-spacing:.04em;text-transform:uppercase;}
+.finger-count{font-family:'Syne',sans-serif;font-size:.55rem;font-weight:700;color:var(--text2);}
+
+/* ══════════════════════════════════════
+   😤 PANIC DETECTOR
+══════════════════════════════════════ */
+.panic-overlay{position:fixed;inset:0;z-index:8000;pointer-events:none;opacity:0;transition:opacity .5s;}
+.panic-overlay.active{opacity:1;pointer-events:auto;}
+.panic-overlay::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at center,transparent 40%,rgba(255,78,106,.12) 100%);animation:panicPulse 1s ease infinite;}
+@keyframes panicPulse{0%,100%{opacity:.6;}50%{opacity:1;}}
+.panic-box{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);background:var(--panel);border:1.5px solid #ff4e6a;border-radius:20px;padding:1.75rem 2rem;text-align:center;z-index:8001;box-shadow:0 0 40px rgba(255,78,106,.25);animation:panicIn .3s cubic-bezier(.16,1,.3,1);max-width:340px;width:90%;}
+@keyframes panicIn{from{opacity:0;transform:translate(-50%,-50%) scale(.9);}to{opacity:1;transform:translate(-50%,-50%) scale(1);}}
+.panic-emoji{font-size:2rem;margin-bottom:.5rem;}
+.panic-title{font-family:'Syne',sans-serif;font-size:1rem;font-weight:800;color:#ff4e6a;margin-bottom:.3rem;}
+.panic-sub{font-family:'DM Sans',sans-serif;font-size:.8rem;color:var(--text2);margin-bottom:1rem;line-height:1.5;}
+.breath-ring{width:70px;height:70px;border-radius:50%;border:3px solid rgba(78,240,192,.3);margin:0 auto .75rem;display:flex;align-items:center;justify-content:center;position:relative;font-family:'Space Mono',monospace;font-size:.6rem;color:var(--accent2);}
+.breath-ring::before{content:'';position:absolute;inset:-3px;border-radius:50%;border:3px solid var(--accent2);animation:breathe 4s ease infinite;}
+@keyframes breathe{0%,100%{transform:scale(1);opacity:.4;}50%{transform:scale(1.15);opacity:1;}}
+.panic-dismiss{font-family:'Space Mono',monospace;font-size:.6rem;color:var(--text3);cursor:pointer;text-transform:uppercase;letter-spacing:.06em;margin-top:.5rem;padding:6px 14px;border-radius:100px;border:1px solid var(--border);background:transparent;transition:all .2s;}
+.panic-dismiss:hover{color:var(--text);border-color:var(--border2);}
+
+/* ══════════════════════════════════════
+   🏅 ACHIEVEMENT SYSTEM
+══════════════════════════════════════ */
+.achievement-popup{position:fixed;top:1.5rem;right:1.5rem;z-index:9500;display:flex;flex-direction:column;gap:8px;pointer-events:none;}
+.achievement-card{background:var(--panel);border:1px solid var(--border2);border-radius:16px;padding:.85rem 1.1rem;display:flex;align-items:center;gap:10px;box-shadow:0 8px 32px var(--shadow);animation:achieveIn .5s cubic-bezier(.16,1,.3,1) forwards;min-width:240px;max-width:300px;pointer-events:auto;position:relative;overflow:hidden;}
+.achievement-card::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(127,255,110,.06),transparent);pointer-events:none;}
+@keyframes achieveIn{from{opacity:0;transform:translateX(60px);}to{opacity:1;transform:translateX(0);}}
+@keyframes achieveOut{from{opacity:1;transform:translateX(0);}to{opacity:0;transform:translateX(60px);}}
+.ach-icon{font-size:1.5rem;flex-shrink:0;}
+.ach-body{}
+.ach-label{font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:1px;}
+.ach-title{font-family:'Syne',sans-serif;font-size:.85rem;font-weight:700;color:var(--text);}
+.ach-desc{font-family:'DM Sans',sans-serif;font-size:.72rem;color:var(--text3);margin-top:1px;}
+.ach-shimmer{position:absolute;top:0;left:-100%;width:60%;height:100%;background:linear-gradient(90deg,transparent,rgba(255,255,255,.06),transparent);animation:shimmer .8s ease .2s forwards;}
+@keyframes shimmer{to{left:150%;}}
+
+/* ══════════════════════════════════════
+   🔥 WORD DIFFICULTY TRACKER
+══════════════════════════════════════ */
+.word.struggle{border-bottom:2px solid rgba(255,78,106,.6)!important;position:relative;}
+.word.struggle::after{content:'✗';position:absolute;top:-10px;right:-2px;font-size:.45rem;color:var(--wrong);font-family:'Space Mono',monospace;}
+.word.mastered{border-bottom:2px solid rgba(127,255,110,.5)!important;}
+.word.mastered::after{content:'✓';position:absolute;top:-10px;right:-2px;font-size:.45rem;color:var(--correct);font-family:'Space Mono',monospace;}
+.struggle-report{background:var(--panel);border:1px solid var(--border);border-radius:16px;padding:1rem 1.25rem;margin-top:1rem;display:none;}
+.struggle-report.show{display:block;}
+.sr-title{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.12em;text-transform:uppercase;color:var(--text3);margin-bottom:.75rem;}
+.sr-words{display:flex;flex-wrap:wrap;gap:6px;}
+.sr-word{font-family:'Space Mono',monospace;font-size:.7rem;padding:3px 10px;border-radius:100px;background:var(--panel2);border:1px solid var(--border);color:var(--text2);position:relative;}
+.sr-word .sr-err{font-size:.48rem;color:var(--wrong);margin-left:4px;}
+
+/* ══════════════════════════════════════
+   📊 LIVE CONSISTENCY METER (Bonus)
+══════════════════════════════════════ */
+.consistency-bar-wrap{display:flex;align-items:center;gap:8px;margin-top:.5rem;}
+.consistency-label{font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.08em;text-transform:uppercase;color:var(--text3);white-space:nowrap;}
+.consistency-track{flex:1;height:4px;background:var(--panel2);border-radius:4px;overflow:hidden;}
+.consistency-fill{height:100%;border-radius:4px;background:linear-gradient(90deg,var(--wrong),var(--accent2),var(--accent));transition:width .6s ease;}
+.consistency-val{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--accent2);min-width:28px;text-align:right;}
+
+/* ══════════════════════════════════════
+   🎵 SOUND FX TOGGLE BUTTON
+══════════════════════════════════════ */
+.sound-toggle{position:relative;}
+.sound-toggle.muted .sound-on{display:none;}
+.sound-toggle:not(.muted) .sound-off{display:none;}
+
+/* ══════════════════════════════════════
+   ⚔️ GHOST RACE
+══════════════════════════════════════ */
+.ghost-bar{display:flex;align-items:center;gap:10px;background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:.6rem 1rem;margin-bottom:.75rem;display:none;}
+.ghost-bar.active{display:flex;}
+.ghost-avatar{font-size:1rem;}
+.ghost-info{flex:1;}
+.ghost-label{font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);}
+.ghost-track{height:6px;background:var(--panel2);border-radius:3px;margin-top:4px;position:relative;overflow:visible;}
+.ghost-you{position:absolute;top:-3px;width:12px;height:12px;border-radius:50%;background:var(--accent);transition:left .4s ease;box-shadow:0 0 8px var(--accent);}
+.ghost-them{position:absolute;top:-3px;width:12px;height:12px;border-radius:50%;background:var(--accent3);opacity:.7;transition:left .4s ease;}
+.ghost-delta{font-family:'Syne',sans-serif;font-size:.9rem;font-weight:700;}
+.ghost-delta.ahead{color:var(--accent);}
+.ghost-delta.behind{color:var(--accent3);}
+
+/* ══════════════════════════════════════
+   🎭 MOOD THEME — dynamic glow pulse
+══════════════════════════════════════ */
+body.mood-calm    .bg-glow{background:radial-gradient(ellipse 55% 40% at 15% 15%,rgba(78,240,192,.07) 0%,transparent 65%),radial-gradient(ellipse 45% 35% at 85% 85%,rgba(127,255,110,.04) 0%,transparent 65%);}
+body.mood-flow    .bg-glow{background:radial-gradient(ellipse 60% 45% at 20% 20%,rgba(127,255,110,.09) 0%,transparent 65%),radial-gradient(ellipse 50% 40% at 80% 80%,rgba(78,240,192,.07) 0%,transparent 65%);transition:background 2s;}
+body.mood-intense .bg-glow{background:radial-gradient(ellipse 70% 50% at 50% 50%,rgba(255,110,180,.08) 0%,transparent 65%),radial-gradient(ellipse 55% 45% at 20% 80%,rgba(255,78,106,.06) 0%,transparent 65%);transition:background 2s;}
+.mood-pill{display:inline-flex;align-items:center;gap:5px;font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.08em;text-transform:uppercase;padding:3px 10px;border-radius:100px;border:1px solid var(--border);color:var(--text3);transition:all .6s;}
+.mood-pill.calm   {border-color:rgba(78,240,192,.3);color:var(--accent2);}
+.mood-pill.flow   {border-color:rgba(127,255,110,.3);color:var(--accent);}
+.mood-pill.intense{border-color:rgba(255,110,180,.3);color:var(--accent3);}
+
+/* ══════════════════════════════════════
+   📅 DAILY STREAK CALENDAR
+══════════════════════════════════════ */
+.streak-modal-overlay{position:fixed;inset:0;background:var(--modal-bg);z-index:700;display:none;align-items:center;justify-content:center;padding:1rem;}
+.streak-modal-overlay.show{display:flex;}
+.streak-modal{background:var(--panel);border:1px solid var(--border2);border-radius:24px;padding:2rem;max-width:560px;width:100%;box-shadow:0 24px 64px var(--shadow);animation:popIn .3s cubic-bezier(.16,1,.3,1);}
+.streak-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem;}
+.streak-title-block{}
+.streak-title{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:800;color:var(--text);}
+.streak-sub{font-family:'Space Mono',monospace;font-size:.55rem;color:var(--text3);margin-top:2px;letter-spacing:.08em;}
+.streak-close{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--panel2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .2s;font-size:.8rem;}
+.streak-close:hover{border-color:var(--wrong);color:var(--wrong);}
+.streak-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:1.5rem;}
+.streak-stat{background:var(--panel2);border-radius:12px;padding:.75rem 1rem;text-align:center;}
+.streak-stat-val{font-family:'Syne',sans-serif;font-size:1.4rem;font-weight:800;color:var(--accent);}
+.streak-stat-lbl{font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:2px;}
+.cal-label{font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.6rem;}
+.cal-grid{display:grid;grid-template-columns:repeat(14,1fr);gap:3px;}
+.cal-day{width:100%;aspect-ratio:1;border-radius:3px;cursor:default;transition:transform .1s;}
+.cal-day:hover{transform:scale(1.3);}
+.cal-day.empty{background:var(--panel2);}
+.cal-day.d0{background:var(--panel2);opacity:.4;}
+.cal-day.d1{background:rgba(127,255,110,.25);}
+.cal-day.d2{background:rgba(127,255,110,.5);}
+.cal-day.d3{background:rgba(127,255,110,.75);}
+.cal-day.d4{background:var(--accent);}
+.cal-day.today{box-shadow:0 0 0 2px var(--accent);}
+.cal-months{display:flex;gap:4px;margin-bottom:.25rem;}
+.cal-month-lbl{font-family:'Space Mono',monospace;font-size:.42rem;color:var(--text3);flex:1;text-align:center;}
+
+/* ══════════════════════════════════════
+   🔬 MICRO-ANALYSIS MODAL
+══════════════════════════════════════ */
+.micro-modal-overlay{position:fixed;inset:0;background:var(--modal-bg);z-index:700;display:none;align-items:center;justify-content:center;padding:1rem;}
+.micro-modal-overlay.show{display:flex;}
+.micro-modal{background:var(--panel);border:1px solid var(--border2);border-radius:24px;padding:2rem;max-width:600px;width:100%;max-height:85vh;overflow-y:auto;box-shadow:0 24px 64px var(--shadow);animation:popIn .3s cubic-bezier(.16,1,.3,1);}
+.micro-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;}
+.micro-title{font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:800;color:var(--text);}
+.micro-close{width:32px;height:32px;border-radius:50%;border:1px solid var(--border);background:var(--panel2);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text3);transition:all .2s;font-size:.8rem;}
+.micro-close:hover{border-color:var(--wrong);color:var(--wrong);}
+.micro-summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:1.25rem;}
+.micro-sum-card{background:var(--panel2);border-radius:10px;padding:.65rem .9rem;text-align:center;}
+.micro-sum-val{font-family:'Syne',sans-serif;font-size:1.1rem;font-weight:700;color:var(--accent);}
+.micro-sum-lbl{font-family:'Space Mono',monospace;font-size:.48rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-top:1px;}
+.micro-word-list{display:flex;flex-wrap:wrap;gap:6px;}
+.micro-word-chip{display:inline-flex;flex-direction:column;align-items:center;padding:5px 10px;border-radius:8px;border:1px solid var(--border);background:var(--panel2);min-width:52px;position:relative;cursor:default;transition:transform .15s;}
+.micro-word-chip:hover{transform:translateY(-2px);}
+.mwc-word{font-family:'Space Mono',monospace;font-size:.65rem;color:var(--text);}
+.mwc-time{font-family:'Syne',sans-serif;font-size:.7rem;font-weight:700;}
+.mwc-ok{border-color:rgba(127,255,110,.3);}
+.mwc-ok .mwc-time{color:var(--accent);}
+.mwc-err{border-color:rgba(255,78,106,.3);background:var(--wrong-bg);}
+.mwc-err .mwc-time{color:var(--wrong);}
+.mwc-slow{border-color:rgba(255,200,50,.3);}
+.mwc-slow .mwc-time{color:#ffc832;}
+
+/* ══════════════════════════════════════
+   🎵 SOUND WAVE ICON (header area)
+══════════════════════════════════════ */
+#sound-icon-on{display:block;}
+#sound-icon-off{display:none;}
+.icon-btn.sound-muted #sound-icon-on{display:none;}
+.icon-btn.sound-muted #sound-icon-off{display:block;}
+
 /* ── RESPONSIVE ── */
 @media(max-width:680px){
   .stats-row{grid-template-columns:repeat(2,1fr);}
@@ -405,6 +585,13 @@ kbd{font-family:'Space Mono',monospace;font-size:.58rem;background:var(--kbd-bg)
       <div class="logo-tag">Typing Speed Test v5.0 · AI Powered</div>
     </div>
     <div class="header-right">
+      <button class="icon-btn" id="sound-btn" onclick="toggleSound()" title="Sound FX">
+        <svg id="sound-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"/></svg>
+        <svg id="sound-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"/><line x1="23" y1="9" x2="17" y2="15"/><line x1="17" y1="9" x2="23" y2="15"/></svg>
+      </button>
+      <button class="icon-btn" onclick="openStreak()" title="Daily Streak">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      </button>
       <button class="icon-btn" onclick="toggleTheme()" title="Toggle theme">
         <svg id="theme-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
           <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
@@ -454,6 +641,7 @@ kbd{font-family:'Space Mono',monospace;font-size:.58rem;background:var(--kbd-bg)
       <button class="config-btn" data-wc="100" onclick="setWordCount(100,this)">100</button>
     </div>
     <div class="mode-badge" id="mode-badge">⏱ Timed · 60s</div>
+    <div class="mood-pill calm" id="mood-pill">😌 Calm</div>
   </div>
 
   <!-- STATS -->
@@ -516,6 +704,30 @@ kbd{font-family:'Space Mono',monospace;font-size:.58rem;background:var(--kbd-bg)
     </div>
   </div>
 
+  <!-- 🫀 HEARTBEAT RHYTHM VISUALIZER -->
+  <div class="rhythm-wrap" id="rhythm-wrap">
+    <div class="rhythm-header">
+      <div class="rhythm-title">
+        <svg width="12" height="12" viewBox="0 0 16 16" fill="none" stroke="var(--accent3)" stroke-width="2"><path d="M1 8h3l2-5 3 10 2-5h4"/></svg>
+        Typing Rhythm
+      </div>
+      <div class="rhythm-bpm" id="rhythm-bpm">— KPM</div>
+    </div>
+    <canvas id="rhythm-canvas" height="52"></canvas>
+    <div class="rhythm-status">Rhythm: <span id="rhythm-status-text">টাইপিং শুরু করুন</span></div>
+  </div>
+
+  <!-- 🧠 FINGER HEATMAP -->
+  <div class="heatmap-wrap" id="heatmap-wrap">
+    <div class="heatmap-header">
+      <div class="heatmap-title">🧠 Finger Load Heatmap</div>
+      <div class="heatmap-legend"><div class="heatmap-legend-bar"></div><span>Low → High</span></div>
+    </div>
+    <div class="finger-grid" id="finger-grid">
+      <!-- generated by JS -->
+    </div>
+  </div>
+
   <!-- BUTTONS -->
   <div class="btn-row">
     <button class="btn primary" id="start-btn" onclick="startTest()">
@@ -559,6 +771,88 @@ kbd{font-family:'Space Mono',monospace;font-size:.58rem;background:var(--kbd-bg)
       <div class="summary-item"><div class="summary-label">Final Accuracy</div><div class="summary-val" id="final-acc">—</div></div>
     </div>
     <div class="save-badge" id="save-badge">✓ স্কোর সেভ হয়েছে!</div>
+    <button class="btn" onclick="openMicro()" style="margin-top:.75rem;font-size:.6rem;">
+      <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 5v3l2 2"/></svg>
+      🔬 Word-by-Word Analysis
+    </button>
+  </div>
+
+  <!-- 🔥 WORD STRUGGLE REPORT -->
+  <div class="struggle-report" id="struggle-report">
+    <div class="sr-title">🔥 কঠিন লাগা Words — আরও Practice করুন</div>
+    <div class="sr-words" id="sr-words"></div>
+  </div>
+
+  <!-- 😤 PANIC DETECTOR OVERLAY -->
+  <div class="panic-overlay" id="panic-overlay">
+    <div class="panic-box" id="panic-box">
+      <div class="panic-emoji">😤</div>
+      <div class="panic-title">Panic Detected!</div>
+      <div class="panic-sub">আপনার typing speed হঠাৎ কমে গেছে।<br>একটু থামুন, শ্বাস নিন।</div>
+      <div class="breath-ring" id="breath-text">শ্বাস নিন</div>
+      <button class="panic-dismiss" onclick="dismissPanic()">ঠিক আছে, চালিয়ে যাই →</button>
+    </div>
+  </div>
+
+  <!-- 🏅 ACHIEVEMENT POPUP CONTAINER -->
+  <div class="achievement-popup" id="achievement-popup"></div>
+</div>
+
+<!-- ⚔️ GHOST RACE BAR — inside container but outside main flow -->
+<div style="position:relative;z-index:1;max-width:960px;margin:0 auto;padding:0 1.5rem;">
+  <div class="ghost-bar" id="ghost-bar">
+    <div class="ghost-avatar">👻</div>
+    <div class="ghost-info">
+      <div class="ghost-label">Ghost Race — আপনার সেরা run এর সাথে</div>
+      <div class="ghost-track">
+        <div class="ghost-you" id="ghost-you" style="left:0%"></div>
+        <div class="ghost-them" id="ghost-them" style="left:0%"></div>
+      </div>
+    </div>
+    <div class="ghost-delta" id="ghost-delta">—</div>
+  </div>
+</div>
+
+<!-- 📅 DAILY STREAK MODAL -->
+<div class="streak-modal-overlay" id="streak-modal-overlay" onclick="if(event.target===this)closeStreak()">
+  <div class="streak-modal">
+    <div class="streak-head">
+      <div class="streak-title-block">
+        <div class="streak-title">📅 Daily Streak</div>
+        <div class="streak-sub">আপনার typing journey — গত ৩ মাস</div>
+      </div>
+      <button class="streak-close" onclick="closeStreak()">✕</button>
+    </div>
+    <div class="streak-stats">
+      <div class="streak-stat"><div class="streak-stat-val" id="st-current">0</div><div class="streak-stat-lbl">Current Streak</div></div>
+      <div class="streak-stat"><div class="streak-stat-val" id="st-longest">0</div><div class="streak-stat-lbl">Longest Streak</div></div>
+      <div class="streak-stat"><div class="streak-stat-val" id="st-total">0</div><div class="streak-stat-lbl">Total Days</div></div>
+    </div>
+    <div class="cal-label">Activity Calendar</div>
+    <div class="cal-months" id="cal-months"></div>
+    <div class="cal-grid" id="cal-grid"></div>
+    <div style="display:flex;align-items:center;gap:6px;margin-top:.75rem;font-family:'Space Mono',monospace;font-size:.48rem;color:var(--text3);">
+      Less
+      <div style="width:10px;height:10px;border-radius:2px;background:var(--panel2);border:1px solid var(--border)"></div>
+      <div style="width:10px;height:10px;border-radius:2px;background:rgba(127,255,110,.25)"></div>
+      <div style="width:10px;height:10px;border-radius:2px;background:rgba(127,255,110,.5)"></div>
+      <div style="width:10px;height:10px;border-radius:2px;background:rgba(127,255,110,.75)"></div>
+      <div style="width:10px;height:10px;border-radius:2px;background:var(--accent)"></div>
+      More
+    </div>
+  </div>
+</div>
+
+<!-- 🔬 MICRO-ANALYSIS MODAL -->
+<div class="micro-modal-overlay" id="micro-modal-overlay" onclick="if(event.target===this)closeMicro()">
+  <div class="micro-modal">
+    <div class="micro-head">
+      <div class="micro-title">🔬 Word-by-Word Analysis</div>
+      <button class="micro-close" onclick="closeMicro()">✕</button>
+    </div>
+    <div class="micro-summary" id="micro-summary"></div>
+    <div style="font-family:'Space Mono',monospace;font-size:.52rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.75rem;">প্রতিটি word এর সময় (seconds)</div>
+    <div class="micro-word-list" id="micro-word-list"></div>
   </div>
 </div>
 
@@ -1217,92 +1511,966 @@ function buildChart(){
 }
 
 /* ═══════════════════════════════════════════
-   AI COACH — Claude API Integration
+   AI COACH — Smart Rule-Based Local Analysis
 ═══════════════════════════════════════════ */
-async function getAICoach(wpm, acc) {
+function getAICoach(wpm, acc) {
   const panel = document.getElementById('ai-panel');
   const content = document.getElementById('ai-content');
   panel.classList.add('show');
   panel.scrollIntoView({behavior:'smooth',block:'nearest'});
 
-  // Use last test results if not passed
   const finalWPM = wpm || parseInt(document.getElementById('wpm-val').textContent) || 0;
   const finalAcc = acc || parseInt(document.getElementById('acc-val').textContent) || 100;
 
-  content.innerHTML = `<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div> <span>AI বিশ্লেষণ চলছে...</span></div>`;
+  // Brief "thinking" animation for UX, then show result
+  content.innerHTML = `<div class="ai-loading"><div class="ai-dot"></div><div class="ai-dot"></div><div class="ai-dot"></div> <span>বিশ্লেষণ চলছে...</span></div>`;
 
-  const prompt = `You are an expert typing coach AI. Analyze the following typing test result and give personalized advice in a mix of English and Bengali (Bangla). Be concise but insightful.
-
-Typing Test Result:
-- WPM (Words Per Minute): ${finalWPM}
-- Accuracy: ${finalAcc}%
-- Current Level: ${level}
-- Mode: ${gameMode}
-- Story typed: "${currentStoryTitle || 'N/A'}"
-
-Please respond with a JSON object (no markdown, no code blocks) with these exact fields:
-{
-  "recommended_level": "easy" | "medium" | "hard",
-  "level_reason": "short reason why (1 sentence, mix of English and Bengali)",
-  "performance_summary": "brief summary of their performance (1-2 sentences)",
-  "tips": ["tip 1", "tip 2", "tip 3"],
-  "encouragement": "motivational message in Bengali"
+  setTimeout(() => {
+    const result = analyzePerformance(finalWPM, finalAcc, level, gameMode);
+    renderAIResult(content, result);
+  }, 900);
 }
 
-Tips should be practical, specific to their WPM and accuracy. If accuracy < 90%, focus on accuracy tips. If WPM is low, focus on speed tips. Mix English technical terms with Bengali explanations naturally.`;
+function analyzePerformance(wpm, acc, lvl, mode) {
+  /* ── Recommended Level Logic ── */
+  let recLevel, levelReason;
 
-  try {
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1000,
-        messages: [{role: 'user', content: prompt}]
-      })
-    });
-
-    const data = await response.json();
-    const rawText = data.content?.map(b => b.text || '').join('') || '';
-
-    let result;
-    try {
-      const clean = rawText.replace(/```json|```/g, '').trim();
-      result = JSON.parse(clean);
-    } catch(e) {
-      // fallback
-      result = {
-        recommended_level: finalWPM < 30 ? 'easy' : finalWPM < 60 ? 'medium' : 'hard',
-        level_reason: 'আপনার WPM এবং accuracy এর উপর ভিত্তি করে এই level টি সবচেয়ে উপযুক্ত।',
-        performance_summary: `আপনার typing speed ${finalWPM} WPM এবং accuracy ${finalAcc}%।`,
-        tips: ['প্রতিদিন ১৫ মিনিট practice করুন।','আঙুলের সঠিক position বজায় রাখুন।','স্পীডের চেয়ে accuracy কে প্রাধান্য দিন।'],
-        encouragement: 'চালিয়ে যান! প্রতিটি session আপনাকে আরও ভালো করে তুলছে।'
-      };
+  if (acc < 85) {
+    // Very low accuracy — stay at easy regardless
+    recLevel = 'easy';
+    levelReason = `আপনার accuracy মাত্র ${acc}% — এখন Easy level এ থেকে শুদ্ধতা বাড়ানো দরকার, speed পরে বাড়বে।`;
+  } else if (lvl === 'easy') {
+    if (wpm >= 50 && acc >= 92) {
+      recLevel = 'medium';
+      levelReason = `আপনি Easy তে ${wpm} WPM এ পৌঁছেছেন — এখন Medium level এ যাওয়ার সময় হয়েছে!`;
+    } else if (wpm >= 35 && acc >= 88) {
+      recLevel = 'easy';
+      levelReason = `Easy level এ ভালো করছেন। আরও কিছুদিন practice করে WPM ৫০+ হলে Medium এ যান।`;
+    } else {
+      recLevel = 'easy';
+      levelReason = `Easy level টি এখন আপনার জন্য সঠিক — rhythm ও muscle memory তৈরি হচ্ছে।`;
     }
+  } else if (lvl === 'medium') {
+    if (wpm >= 65 && acc >= 92) {
+      recLevel = 'hard';
+      levelReason = `Medium এ ${wpm} WPM অর্জন চমৎকার! Hard level এ challenge নেওয়ার জন্য আপনি তৈরি।`;
+    } else if (wpm < 30 || acc < 88) {
+      recLevel = 'easy';
+      levelReason = `Medium এখন একটু কঠিন হচ্ছে — Easy তে ফিরে foundation শক্ত করুন।`;
+    } else {
+      recLevel = 'medium';
+      levelReason = `Medium level এ ঠিক আছেন। Consistency বজায় রাখুন এবং WPM ৬৫+ লক্ষ্য রাখুন।`;
+    }
+  } else { // hard
+    if (wpm >= 80 && acc >= 92) {
+      recLevel = 'hard';
+      levelReason = `Hard level এ ${wpm} WPM — অসাধারণ! এই level এ আরও master হতে থাকুন।`;
+    } else if (wpm < 35 || acc < 85) {
+      recLevel = 'medium';
+      levelReason = `Hard level টি এখন অনেক কঠিন হচ্ছে — Medium এ ফিরে speed বাড়ান।`;
+    } else {
+      recLevel = 'hard';
+      levelReason = `Hard level এ চেষ্টা চালিয়ে যান। এই complex words গুলো আপনাকে অনেক শক্তিশালী করবে।`;
+    }
+  }
 
-    const levelColor = result.recommended_level === 'easy' ? 'var(--accent)' : result.recommended_level === 'medium' ? 'var(--accent2)' : 'var(--accent3)';
+  /* ── Performance Summary ── */
+  let perfGrade, perfSummary;
+  if (wpm >= 80 && acc >= 95) {
+    perfGrade = 'exceptional';
+    perfSummary = `অসাধারণ! ${wpm} WPM এবং ${acc}% accuracy — আপনি professional-level typist এর কাছাকাছি। এই consistency ধরে রাখুন।`;
+  } else if (wpm >= 60 && acc >= 90) {
+    perfGrade = 'great';
+    perfSummary = `চমৎকার performance! ${wpm} WPM এবং ${acc}% accuracy সত্যিই ভালো। আপনি average এর অনেক উপরে আছেন।`;
+  } else if (wpm >= 40 && acc >= 85) {
+    perfGrade = 'good';
+    perfSummary = `ভালো performance! ${wpm} WPM এ আছেন। নিয়মিত practice করলে শীঘ্রই ৬০+ WPM এ পৌঁছাবেন।`;
+  } else if (wpm >= 25) {
+    perfGrade = 'developing';
+    perfSummary = `আপনি এখন ${wpm} WPM এ আছেন — এটি শুরু হিসেবে ঠিক আছে। Consistent practice এ দ্রুত উন্নতি হবে।`;
+  } else {
+    perfGrade = 'beginner';
+    perfSummary = `শুরু করার সাহস করেছেন, এটাই সবচেয়ে গুরুত্বপূর্ণ। প্রতিদিন একটু একটু practice করলেই দেখবেন দ্রুত এগোবেন।`;
+  }
 
-    content.innerHTML = `
-      <div class="ai-body">
-        <div style="margin-bottom:.75rem">
-          <div style="font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem">Recommended Level</div>
-          <div class="ai-level-rec" style="border-color:${levelColor};color:${levelColor}">
-            ${result.recommended_level === 'easy' ? '✦ Easy' : result.recommended_level === 'medium' ? '◈ Medium' : '⚡ Hard'}
+  /* ── Personalized Tips (context-aware) ── */
+  const tips = [];
+
+  // Accuracy-based tips
+  if (acc < 85) {
+    tips.push(`Accuracy সবার আগে — speed না বাড়িয়ে প্রতিটি word সঠিকভাবে type করুন। "Slow is smooth, smooth is fast" এই নীতি মানুন।`);
+    tips.push(`Backspace ব্যবহার করতে ভয় পাবেন না — ভুল word পুরো মুছে সঠিকভাবে টাইপ করুন, এতে muscle memory সঠিক হবে।`);
+  } else if (acc < 92) {
+    tips.push(`আপনার accuracy ${acc}% — ৯৫%+ লক্ষ্য রাখুন। Common mistake গুলো note করুন এবং সেই letter combinations বারবার practice করুন।`);
+  } else {
+    tips.push(`আপনার accuracy ${acc}% — চমৎকার! এই শুদ্ধতা বজায় রেখে speed বাড়ানোর চেষ্টা করুন।`);
+  }
+
+  // WPM-based tips
+  if (wpm < 30) {
+    tips.push(`Touch typing শেখা শুরু করুন — সব আঙুল home row (ASDF JKL;) এ রাখুন। Screen এর দিকে তাকিয়ে type করুন, keyboard এ নয়।`);
+    tips.push(`প্রতিদিন মাত্র ১৫ মিনিট practice করুন। ১ মাসেই দেখবেন ৩০+ WPM হয়ে গেছে।`);
+  } else if (wpm < 50) {
+    tips.push(`Common words যেমন "the, and, that, with" গুলো দ্রুত type করার অভ্যাস করুন — এগুলো মোট typing এর ২০%+ জুড়ে থাকে।`);
+    tips.push(`Rhythm এ type করুন — প্রতিটি character এর মাঝে সমান pause রাখুন। Burst typing এ accuracy কমে।`);
+  } else if (wpm < 70) {
+    tips.push(`আপনার weak fingers (ring ও pinky) এর জন্য আলাদা drill করুন। P, Q, Z, X এই keys গুলো বারবার practice করুন।`);
+    tips.push(`Chunk reading শিখুন — একটি word type করার সময় পরের word টি দেখুন। এই anticipation speed বাড়ায়।`);
+  } else {
+    tips.push(`এই stage এ flow state এ enter করতে শিখুন — typing কে conscious effort না ভেবে automatic করুন। Difficult texts দিয়ে practice করুন।`);
+    tips.push(`Code typing বা punctuation-heavy texts এ practice করুন — এটি আপনার সামগ্রিক দক্ষতা বাড়াবে।`);
+  }
+
+  // Mode-specific tip
+  if (mode === 'endless') {
+    tips.push(`Endless mode এ focus maintain করা কঠিন — মাঝে মাঝে deep breath নিন। Long-session endurance আপনার সবচেয়ে বড় শক্তি হয়ে উঠবে।`);
+  } else if (mode === 'timed') {
+    tips.push(`Timed mode এ শেষের দিকে panic করবেন না — calm থাকলে শেষ ১৫ সেকেন্ডেও ভালো করা সম্ভব।`);
+  } else {
+    tips.push(`Words mode এ প্রতিটি word এ focus করুন। সংখ্যা কম হলে চাপ কম — এই সুযোগে perfect accuracy এর চেষ্টা করুন।`);
+  }
+
+  /* ── Encouragement Messages ── */
+  const encouragements = {
+    exceptional: 'আপনি সত্যিই অসাধারণ! এই পর্যায়ে পৌঁছানো সহজ না — আপনার পরিশ্রম ও dedication স্পষ্ট। 🌟',
+    great: 'দারুণ কাজ করছেন! আপনি এমন একটি জায়গায় আছেন যেখানে অনেকে পৌঁছাতে পারে না। এগিয়ে যান! 🚀',
+    good: 'ভালো যাচ্ছে! আপনি সঠিক পথেই আছেন। প্রতিটি session আপনাকে আরও শক্তিশালী করছে। 💪',
+    developing: 'থামবেন না! প্রতিটি expert ও একদিন beginner ছিল। আপনার এই চেষ্টাটাই সবচেয়ে মূল্যবান। ✨',
+    beginner: 'শুরু করাটাই সবচেয়ে কঠিন কাজ, আর আপনি সেটা করেছেন! প্রতিদিন একটু practice করুন — পরিবর্তন দেখতে পাবেন। 🌱'
+  };
+
+  return {
+    recLevel,
+    levelReason,
+    perfSummary,
+    tips: tips.slice(0, 3),
+    encouragement: encouragements[perfGrade],
+    wpm, acc
+  };
+}
+
+function renderAIResult(container, r) {
+  const levelColor = r.recLevel === 'easy' ? 'var(--accent)' : r.recLevel === 'medium' ? 'var(--accent2)' : 'var(--accent3)';
+  const levelIcon  = r.recLevel === 'easy' ? '✦ Easy' : r.recLevel === 'medium' ? '◈ Medium' : '⚡ Hard';
+
+  // WPM progress bar (max reference 100 WPM)
+  const wpmPct = Math.min(100, Math.round((r.wpm / 100) * 100));
+  const accPct = r.acc;
+  const wpmBarColor = r.wpm >= 60 ? 'var(--accent)' : r.wpm >= 35 ? 'var(--accent2)' : 'var(--accent3)';
+  const accBarColor = r.acc >= 92 ? 'var(--accent)' : r.acc >= 82 ? 'var(--accent2)' : 'var(--accent3)';
+
+  container.innerHTML = `
+    <div class="ai-body">
+
+      <!-- Metrics mini bars -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:1rem;">
+        <div style="background:var(--panel2);border-radius:10px;padding:.7rem .9rem;">
+          <div style="font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem">Speed</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:${wpmBarColor};line-height:1">${r.wpm} <span style="font-size:.6rem;color:var(--text3)">WPM</span></div>
+          <div style="margin-top:.5rem;height:4px;background:var(--panel);border-radius:4px;overflow:hidden">
+            <div style="height:100%;width:${wpmPct}%;background:${wpmBarColor};border-radius:4px;transition:width 1s ease"></div>
           </div>
-          <div style="font-size:.78rem;color:var(--text3);margin-top:.3rem;font-family:'DM Sans',sans-serif;">${result.level_reason}</div>
         </div>
-        <div style="background:var(--panel2);border-radius:10px;padding:.75rem 1rem;margin-bottom:.75rem;font-size:.83rem;color:var(--text2);">${result.performance_summary}</div>
-        <div style="font-family:'Space Mono',monospace;font-size:.55rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.5rem">Tips for You</div>
-        <ul class="ai-tip-list">
-          ${result.tips.map(t=>`<li>${t}</li>`).join('')}
-        </ul>
-        <div style="margin-top:.9rem;padding:.75rem 1rem;background:rgba(127,255,110,.05);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:.82rem;color:var(--text2);font-style:italic;">${result.encouragement}</div>
+        <div style="background:var(--panel2);border-radius:10px;padding:.7rem .9rem;">
+          <div style="font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem">Accuracy</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.3rem;font-weight:700;color:${accBarColor};line-height:1">${r.acc}<span style="font-size:.6rem;color:var(--text3)">%</span></div>
+          <div style="margin-top:.5rem;height:4px;background:var(--panel);border-radius:4px;overflow:hidden">
+            <div style="height:100%;width:${accPct}%;background:${accBarColor};border-radius:4px;transition:width 1s ease"></div>
+          </div>
+        </div>
       </div>
-    `;
-  } catch(e) {
-    content.innerHTML = `<div style="font-family:'Space Mono',monospace;font-size:.65rem;color:var(--text3);">⚠️ AI Coach সংযোগ করতে পারছে না। পরে আবার চেষ্টা করুন।</div>`;
+
+      <!-- Recommended Level -->
+      <div style="margin-bottom:.85rem">
+        <div style="font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.4rem">Recommended Level</div>
+        <div class="ai-level-rec" style="border-color:${levelColor};color:${levelColor}">${levelIcon}</div>
+        <div style="font-size:.78rem;color:var(--text3);margin-top:.4rem;font-family:'DM Sans',sans-serif;line-height:1.5">${r.levelReason}</div>
+      </div>
+
+      <!-- Performance Summary -->
+      <div style="background:var(--panel2);border-radius:10px;padding:.75rem 1rem;margin-bottom:.85rem;font-size:.83rem;color:var(--text2);line-height:1.6">${r.perfSummary}</div>
+
+      <!-- Tips -->
+      <div style="font-family:'Space Mono',monospace;font-size:.5rem;letter-spacing:.1em;text-transform:uppercase;color:var(--text3);margin-bottom:.5rem">আপনার জন্য Tips</div>
+      <ul class="ai-tip-list">${r.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+
+      <!-- Encouragement -->
+      <div style="margin-top:.9rem;padding:.75rem 1rem;background:rgba(127,255,110,.05);border-left:3px solid var(--accent);border-radius:0 8px 8px 0;font-size:.82rem;color:var(--text2);font-style:italic;line-height:1.6">${r.encouragement}</div>
+    </div>
+  `;
+}
+
+/* ═══════════════════════════════════════════════════════
+   🫀 HEARTBEAT RHYTHM VISUALIZER
+   — Real-time keystroke interval waveform
+═══════════════════════════════════════════════════════ */
+const RHYTHM_HISTORY_MAX = 80;
+let rhythmIntervals = []; // ms between keystrokes
+let lastKeystrokeTime = 0;
+let rhythmAnimId = null;
+
+function recordKeystroke() {
+  const now = Date.now();
+  if (lastKeystrokeTime) {
+    const interval = now - lastKeystrokeTime;
+    if (interval < 2000) { // ignore pauses > 2s
+      rhythmIntervals.push(interval);
+      if (rhythmIntervals.length > RHYTHM_HISTORY_MAX) rhythmIntervals.shift();
+      updateRhythmBPM();
+    }
+  }
+  lastKeystrokeTime = now;
+}
+
+function updateRhythmBPM() {
+  if (rhythmIntervals.length < 2) return;
+  const recent = rhythmIntervals.slice(-10);
+  const avgMs = recent.reduce((a,b)=>a+b,0)/recent.length;
+  const kpm = Math.round(60000 / avgMs);
+  document.getElementById('rhythm-bpm').textContent = kpm + ' KPM';
+
+  // Rhythm quality assessment
+  const variance = recent.reduce((sum,v)=>{const d=v-avgMs;return sum+d*d;},0)/recent.length;
+  const stdDev = Math.sqrt(variance);
+  const consistency = Math.max(0, 100 - Math.round(stdDev/avgMs*100));
+  let statusText, statusColor;
+  if (consistency >= 80) { statusText = 'Excellent rhythm 🎵'; statusColor = 'var(--accent)'; }
+  else if (consistency >= 60) { statusText = 'Good rhythm'; statusColor = 'var(--accent2)'; }
+  else if (consistency >= 40) { statusText = 'Irregular — slow down'; statusColor = '#ffc832'; }
+  else { statusText = 'Very uneven — focus!'; statusColor = 'var(--accent3)'; }
+
+  const statusEl = document.getElementById('rhythm-status-text');
+  statusEl.textContent = statusText;
+  statusEl.style.color = statusColor;
+}
+
+function drawRhythmCanvas() {
+  const canvas = document.getElementById('rhythm-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth; const H = 52;
+  canvas.width = W; canvas.height = H;
+  ctx.clearRect(0, 0, W, H);
+
+  if (rhythmIntervals.length < 2) {
+    // idle line
+    ctx.strokeStyle = 'rgba(127,255,110,0.1)';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(0, H/2); ctx.lineTo(W, H/2);
+    ctx.stroke();
+    return;
+  }
+
+  const data = rhythmIntervals.slice(-60);
+  const max = Math.max(...data); const min = Math.min(...data);
+  const range = max - min || 1;
+  const pad = 6;
+
+  // gradient stroke
+  const grad = ctx.createLinearGradient(0,0,W,0);
+  grad.addColorStop(0,'rgba(78,240,192,0.2)');
+  grad.addColorStop(1,'rgba(127,255,110,0.9)');
+
+  ctx.strokeStyle = grad;
+  ctx.lineWidth = 2;
+  ctx.lineJoin = 'round';
+  ctx.beginPath();
+
+  data.forEach((val, i) => {
+    const x = (i / (data.length - 1)) * W;
+    const y = pad + ((val - min) / range) * (H - pad*2);
+    // invert: faster (lower interval) = higher on canvas
+    const yInv = H - y;
+    i === 0 ? ctx.moveTo(x, yInv) : ctx.lineTo(x, yInv);
+  });
+  ctx.stroke();
+
+  // fill under
+  ctx.lineTo(W, H); ctx.lineTo(0, H); ctx.closePath();
+  const fillGrad = ctx.createLinearGradient(0,0,0,H);
+  fillGrad.addColorStop(0,'rgba(127,255,110,0.15)');
+  fillGrad.addColorStop(1,'rgba(127,255,110,0)');
+  ctx.fillStyle = fillGrad;
+  ctx.fill();
+
+  // latest dot
+  if (data.length > 1) {
+    const lx = W; const ly = H - (pad + ((data[data.length-1]-min)/range)*(H-pad*2));
+    ctx.beginPath();
+    ctx.arc(lx, ly, 3.5, 0, Math.PI*2);
+    ctx.fillStyle = '#7fff6e';
+    ctx.fill();
+  }
+
+  rhythmAnimId = requestAnimationFrame(drawRhythmCanvas);
+}
+
+function startRhythmViz() {
+  rhythmIntervals = []; lastKeystrokeTime = 0;
+  if (rhythmAnimId) cancelAnimationFrame(rhythmAnimId);
+  drawRhythmCanvas();
+}
+function stopRhythmViz() {
+  if (rhythmAnimId) cancelAnimationFrame(rhythmAnimId);
+  rhythmAnimId = null;
+  drawRhythmCanvas(); // draw final state
+}
+
+/* ═══════════════════════════════════════════════════════
+   🧠 FINGER LOAD HEATMAP
+   — Maps every key to a finger, tracks press count live
+═══════════════════════════════════════════════════════ */
+const FINGER_MAP = {
+  // Left Pinky
+  '`':0,'1':0,'q':0,'a':0,'z':0,'Tab':0,'CapsLock':0,'Shift':0,
+  // Left Ring
+  '2':1,'w':1,'s':1,'x':1,
+  // Left Middle
+  '3':2,'e':2,'d':2,'c':2,
+  // Left Index
+  '4':3,'r':3,'f':3,'v':3,'5':3,'t':3,'g':3,'b':3,
+  // Thumbs (space)
+  ' ':4,
+  // Right Index
+  '6':5,'y':5,'h':5,'n':5,'7':5,'u':5,'j':5,'m':5,
+  // Right Middle
+  '8':6,'i':6,'k':6,',':6,
+  // Right Ring
+  '9':7,'o':7,'l':7,'.':7,
+  // Right Pinky
+  '0':8,'p':8,';':8,'/':8,'-':8,'[':8,"'":8,'=':8,']':8,'\\':8,'Backspace':8,'Enter':8
+};
+
+const FINGER_LABELS = ['L·P','L·R','L·M','L·I','⎵','R·I','R·M','R·R','R·P'];
+const FINGER_NAMES  = ['Left\nPinky','Left\nRing','Left\nMiddle','Left\nIndex','Space','Right\nIndex','Right\nMiddle','Right\nRing','Right\nPinky'];
+let fingerCounts = new Array(9).fill(0);
+
+function buildFingerGrid() {
+  const grid = document.getElementById('finger-grid');
+  grid.innerHTML = FINGER_LABELS.map((lbl, i) => `
+    <div class="finger-col" id="fc-${i}">
+      <div class="finger-count" id="fcnt-${i}">0</div>
+      <div class="finger-bar-wrap">
+        <div class="finger-bar" id="fbar-${i}" style="height:0%;background:var(--accent2)"></div>
+      </div>
+      <div class="finger-label">${lbl}</div>
+    </div>
+  `).join('');
+}
+
+function recordFingerPress(key) {
+  const fi = FINGER_MAP[key.toLowerCase()] ?? FINGER_MAP[key];
+  if (fi === undefined) return;
+  fingerCounts[fi]++;
+  updateFingerHeatmap();
+}
+
+function updateFingerHeatmap() {
+  const max = Math.max(...fingerCounts, 1);
+  fingerCounts.forEach((cnt, i) => {
+    const pct = (cnt / max) * 100;
+    const bar = document.getElementById('fbar-'+i);
+    const countEl = document.getElementById('fcnt-'+i);
+    if (!bar || !countEl) return;
+    // color: low = cool blue/teal → high = hot accent
+    const r = Math.round(78 + (127-78)*(pct/100));
+    const g = Math.round(240 + (255-240)*(pct/100));
+    const b = Math.round(192 * (1 - pct/100));
+    if (pct > 70) bar.style.background = `rgb(255,${Math.round(110+pct)},110)`;
+    else if (pct > 40) bar.style.background = 'var(--accent2)';
+    else bar.style.background = 'rgba(78,240,192,0.5)';
+    bar.style.height = Math.max(4, pct) + '%';
+    countEl.textContent = cnt;
+  });
+}
+
+function resetFingerCounts() {
+  fingerCounts = new Array(9).fill(0);
+  updateFingerHeatmap();
+}
+
+/* ═══════════════════════════════════════════════════════
+   😤 PANIC DETECTOR
+   — Monitors WPM drop; if >40% fall in 5s, trigger
+═══════════════════════════════════════════════════════ */
+let panicWpmWindow = [];
+let panicTriggered = false;
+let panicTimerId = null;
+let breathPhase = 0;
+let breathTimerId = null;
+
+function checkPanic(currentWpm) {
+  if (!running || panicTriggered || currentWpm === 0) return;
+  panicWpmWindow.push(currentWpm);
+  if (panicWpmWindow.length > 8) panicWpmWindow.shift();
+  if (panicWpmWindow.length < 5) return;
+  const peak = Math.max(...panicWpmWindow.slice(0, -3));
+  const recent = panicWpmWindow[panicWpmWindow.length-1];
+  if (peak > 15 && recent < peak * 0.55) {
+    triggerPanic();
   }
 }
+
+function triggerPanic() {
+  panicTriggered = true;
+  document.getElementById('panic-overlay').classList.add('active');
+  startBreathGuide();
+}
+
+const BREATH_PHASES = [
+  {text:'শ্বাস নিন...', dur:4000},
+  {text:'ধরে রাখুন', dur:2000},
+  {text:'ছাড়ুন...', dur:4000},
+  {text:'বিশ্রাম', dur:2000}
+];
+function startBreathGuide() {
+  breathPhase = 0;
+  runBreath();
+}
+function runBreath() {
+  const el = document.getElementById('breath-text');
+  if (!el) return;
+  const phase = BREATH_PHASES[breathPhase % BREATH_PHASES.length];
+  el.textContent = phase.text;
+  breathTimerId = setTimeout(()=>{breathPhase++;runBreath();}, phase.dur);
+}
+function dismissPanic() {
+  document.getElementById('panic-overlay').classList.remove('active');
+  clearTimeout(breathTimerId);
+  panicTriggered = false;
+  panicWpmWindow = [];
+}
+
+/* ═══════════════════════════════════════════════════════
+   🔥 WORD DIFFICULTY TRACKER
+   — Remembers words you always get wrong; highlights them
+═══════════════════════════════════════════════════════ */
+let wordMistakes = {}; // word → error count this session
+let wordAttempts = {}; // word → attempt count
+
+function recordWordResult(word, correct) {
+  wordAttempts[word] = (wordAttempts[word]||0) + 1;
+  if (!correct) wordMistakes[word] = (wordMistakes[word]||0) + 1;
+}
+
+function applyWordDifficultyStyle(wi, word, correct) {
+  const el = document.getElementById('word-'+wi);
+  if (!el) return;
+  const errs = wordMistakes[word] || 0;
+  const atts = wordAttempts[word] || 1;
+  el.classList.remove('struggle','mastered');
+  if (!correct && errs >= 1) el.classList.add('struggle');
+  else if (correct && atts >= 2 && errs === 0) el.classList.add('mastered');
+}
+
+function showStruggleReport() {
+  const report = document.getElementById('struggle-report');
+  const wordsEl = document.getElementById('sr-words');
+  const struggles = Object.entries(wordMistakes)
+    .filter(([,e])=>e>0)
+    .sort((a,b)=>b[1]-a[1])
+    .slice(0,12);
+  if (!struggles.length) { report.classList.remove('show'); return; }
+  report.classList.add('show');
+  wordsEl.innerHTML = struggles.map(([w,e])=>
+    `<div class="sr-word">${w}<span class="sr-err">✗${e}</span></div>`
+  ).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   🏅 ACHIEVEMENT SYSTEM
+   — 16 unique achievements with animations
+═══════════════════════════════════════════════════════ */
+const ACHIEVEMENTS = [
+  {id:'first_word',   icon:'🌱', title:'First Word!',      desc:'প্রথম word সফলভাবে type করলেন',      check:(s)=>s.wordIndex===1},
+  {id:'speed_30',     icon:'🐢', title:'30 WPM Club',      desc:'৩০ WPM পার করলেন',                  check:(s)=>s.wpm>=30},
+  {id:'speed_50',     icon:'🐇', title:'50 WPM Club',      desc:'৫০ WPM — চমৎকার!',                 check:(s)=>s.wpm>=50},
+  {id:'speed_70',     icon:'🚀', title:'70 WPM Rocket',    desc:'৭০ WPM — আপনি দ্রুত!',             check:(s)=>s.wpm>=70},
+  {id:'speed_100',    icon:'⚡', title:'100 WPM Legend',   desc:'১০০ WPM — অসাধারণ!',               check:(s)=>s.wpm>=100},
+  {id:'acc_100',      icon:'🎯', title:'Perfect Aim',      desc:'১০০% accuracy অর্জন করলেন!',        check:(s)=>s.acc===100&&s.wordIndex>10},
+  {id:'acc_95',       icon:'✨', title:'Sharp Shooter',    desc:'৯৫%+ accuracy বজায় রাখলেন',        check:(s)=>s.acc>=95&&s.wordIndex>15},
+  {id:'streak_10',    icon:'🔥', title:'10 Word Streak',   desc:'১০টি word একটানা সঠিক!',            check:(s)=>s.correctStreak>=10},
+  {id:'streak_25',    icon:'💥', title:'25 Word Blaze',    desc:'২৫টি word ভুল ছাড়া!',              check:(s)=>s.correctStreak>=25},
+  {id:'words_50',     icon:'📚', title:'50 Words!',        desc:'৫০টি word type করলেন',              check:(s)=>s.wordIndex>=50},
+  {id:'words_100',    icon:'📖', title:'Century!',         desc:'১০০ words — incredible!',           check:(s)=>s.wordIndex>=100},
+  {id:'endless_zen',  icon:'🌊', title:'Endless Zen',      desc:'Endless mode এ ৫ মিনিট!',           check:(s)=>s.mode==='endless'&&s.elapsed>=300},
+  {id:'comeback',     icon:'💪', title:'Comeback King',    desc:'Panic এর পরে ফিরে এলেন!',          check:(s)=>s.panicRecovered},
+  {id:'no_backspace', icon:'🏹', title:'No Mercy',         desc:'Backspace ছাড়া ১০+ words!',        check:(s)=>s.noBackspaceStreak>=10},
+  {id:'night_owl',    icon:'🦉', title:'Night Owl',        desc:'রাত ১১টার পর typing!',              check:(s)=>new Date().getHours()>=23||new Date().getHours()<4},
+  {id:'early_bird',   icon:'🌅', title:'Early Bird',       desc:'সকাল ৬টার আগে typing!',            check:(s)=>new Date().getHours()>=5&&new Date().getHours()<7},
+];
+
+let unlockedAchievements = new Set(JSON.parse(localStorage.getItem('tf-achievements')||'[]'));
+let sessionAchievements  = new Set(); // only new ones this session
+
+// session counters
+let correctStreak = 0;
+let noBackspaceStreak = 0;
+let panicRecovered = false;
+let backspaceUsed = false;
+
+function checkAchievements() {
+  if (!running && wordIndex < 1) return;
+  const state = {
+    wpm: calcWPM(), acc: calcAcc(), wordIndex,
+    correctStreak, noBackspaceStreak, panicRecovered,
+    mode: gameMode, elapsed: elapsedSeconds
+  };
+  ACHIEVEMENTS.forEach(ach => {
+    if (unlockedAchievements.has(ach.id)) return;
+    if (sessionAchievements.has(ach.id)) return;
+    try {
+      if (ach.check(state)) {
+        unlockAchievement(ach);
+      }
+    } catch(e){}
+  });
+}
+
+function unlockAchievement(ach) {
+  sessionAchievements.add(ach.id);
+  unlockedAchievements.add(ach.id);
+  localStorage.setItem('tf-achievements', JSON.stringify([...unlockedAchievements]));
+  showAchievementCard(ach);
+}
+
+function showAchievementCard(ach) {
+  const container = document.getElementById('achievement-popup');
+  const card = document.createElement('div');
+  card.className = 'achievement-card';
+  card.innerHTML = `
+    <div class="ach-icon">${ach.icon}</div>
+    <div class="ach-body">
+      <div class="ach-label">Achievement Unlocked!</div>
+      <div class="ach-title">${ach.title}</div>
+      <div class="ach-desc">${ach.desc}</div>
+    </div>
+    <div class="ach-shimmer"></div>
+  `;
+  container.appendChild(card);
+  // auto-remove after 4s
+  setTimeout(()=>{
+    card.style.animation='achieveOut .4s ease forwards';
+    setTimeout(()=>card.remove(), 400);
+  }, 4000);
+}
+
+/* ═══════════════════════════════════════════════════════
+   PATCH: wrap existing typing engine hooks
+═══════════════════════════════════════════════════════ */
+// Patch startTest to init new systems
+const _origStart = startTest;
+window.startTest = function() {
+  _origStart();
+  // reset all unique feature state
+  rhythmIntervals = []; lastKeystrokeTime = 0; panicWpmWindow = [];
+  panicTriggered = false; correctStreak = 0; noBackspaceStreak = 0;
+  panicRecovered = false; backspaceUsed = false;
+  wordMistakes = {}; wordAttempts = {};
+  sessionAchievements.clear();
+  resetFingerCounts();
+  startRhythmViz();
+  document.getElementById('struggle-report').classList.remove('show');
+  document.getElementById('panic-overlay').classList.remove('active');
+};
+
+// Patch resetTest
+const _origReset = resetTest;
+window.resetTest = function(silent=false) {
+  _origReset(silent);
+  stopRhythmViz();
+  rhythmIntervals = []; lastKeystrokeTime = 0;
+  document.getElementById('rhythm-bpm').textContent = '— KPM';
+  document.getElementById('rhythm-status-text').textContent = 'টাইপিং শুরু করুন';
+  document.getElementById('rhythm-status-text').style.color = '';
+  document.getElementById('struggle-report').classList.remove('show');
+  resetFingerCounts();
+};
+
+// Patch endTest
+const _origEnd = endTest;
+window.endTest = async function() {
+  stopRhythmViz();
+  await _origEnd();
+  showStruggleReport();
+};
+
+// Intercept keydown for new systems
+document.getElementById('typing-input').addEventListener('keydown', function(e) {
+  if (!running) return;
+  if (e.key === 'Backspace') {
+    backspaceUsed = true;
+    noBackspaceStreak = 0;
+  } else if (e.key.length === 1) {
+    recordKeystroke();
+    recordFingerPress(e.key);
+    // panic recovery
+    if (panicTriggered && !document.getElementById('panic-overlay').classList.contains('active')) {
+      panicRecovered = true;
+    }
+  }
+}, true); // capture phase so it runs before existing handler
+
+// Patch space-press (word completion) — wrap the existing keydown
+const _inputEl = document.getElementById('typing-input');
+_inputEl.addEventListener('keydown', function(e) {
+  if (!running || e.key !== ' ') return;
+  const tw = this.value.trim();
+  const cw = words[wordIndex];
+  if (!tw || !cw) return;
+  const correct = tw === cw;
+  recordWordResult(cw, correct);
+  if (correct) {
+    correctStreak++;
+    if (!backspaceUsed) noBackspaceStreak++;
+  } else {
+    correctStreak = 0;
+    noBackspaceStreak = 0;
+    backspaceUsed = false;
+  }
+  applyWordDifficultyStyle(wordIndex, cw, correct);
+  setTimeout(checkAchievements, 50);
+}, true);
+
+// Check panic + achievements periodically during test
+setInterval(()=>{
+  if (!running) return;
+  checkPanic(calcWPM());
+  checkAchievements();
+}, 2000);
+
+// Draw rhythm canvas on resize
+window.addEventListener('resize', ()=>{ if(running) drawRhythmCanvas(); });
+
+// Consistency meter inside progress area
+(function addConsistencyMeter(){
+  const pw = document.querySelector('.progress-wrap');
+  if (!pw) return;
+  const div = document.createElement('div');
+  div.className = 'consistency-bar-wrap';
+  div.innerHTML = `<div class="consistency-label">Consistency</div><div class="consistency-track"><div class="consistency-fill" id="consistency-fill" style="width:100%"></div></div><div class="consistency-val" id="consistency-val">—</div>`;
+  pw.parentNode.insertBefore(div, pw.nextSibling);
+})();
+
+function updateConsistency(){
+  if (rhythmIntervals.length < 3) return;
+  const recent = rhythmIntervals.slice(-8);
+  const avg = recent.reduce((a,b)=>a+b,0)/recent.length;
+  const variance = recent.reduce((s,v)=>{const d=v-avg;return s+d*d;},0)/recent.length;
+  const cv = Math.sqrt(variance)/avg; // coefficient of variation
+  const score = Math.max(0,Math.min(100,Math.round((1-cv)*100)));
+  const fill = document.getElementById('consistency-fill');
+  const val  = document.getElementById('consistency-val');
+  if(fill) fill.style.width = score+'%';
+  if(val)  val.textContent = score+'%';
+}
+setInterval(()=>{ if(running) updateConsistency(); }, 1000);
+
+/* init finger grid on load */
+buildFingerGrid();
+drawRhythmCanvas();
+
+/* ═══════════════════════════════════════════════════════
+   🎵 SOUND FX ENGINE — Web Audio API synthesized sounds
+═══════════════════════════════════════════════════════ */
+let audioCtx = null;
+let soundEnabled = localStorage.getItem('tf-sound') !== 'false';
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq, type='sine', duration=0.06, vol=0.08, decay=0.04) {
+  if (!soundEnabled) return;
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.type = type; osc.frequency.value = freq;
+    gain.gain.setValueAtTime(vol, ctx.currentTime);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+    osc.start(ctx.currentTime); osc.stop(ctx.currentTime + duration + decay);
+  } catch(e){}
+}
+
+function sfxKeypress()  { playTone(880 + Math.random()*40, 'sine', 0.04, 0.04); }
+function sfxCorrect()   { playTone(660, 'sine', 0.08, 0.1); setTimeout(()=>playTone(880,'sine',0.08,0.08),60); }
+function sfxError()     { playTone(180, 'sawtooth', 0.1, 0.12); }
+function sfxFinish()    {
+  [523,659,784,1047].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',0.18,0.15),i*80));
+}
+function sfxAchieve()   { [880,1100,1320].forEach((f,i)=>setTimeout(()=>playTone(f,'sine',0.12,0.1),i*60)); }
+function sfxPanic()     { playTone(220, 'sawtooth', 0.3, 0.15); }
+
+function toggleSound() {
+  soundEnabled = !soundEnabled;
+  localStorage.setItem('tf-sound', String(soundEnabled));
+  const btn = document.getElementById('sound-btn');
+  btn.classList.toggle('sound-muted', !soundEnabled);
+  showToast(soundEnabled ? '🔊 Sound ON' : '🔇 Sound OFF', 1500);
+  if (soundEnabled) sfxCorrect();
+}
+
+// init sound button state
+document.addEventListener('DOMContentLoaded', ()=>{
+  if (!soundEnabled) document.getElementById('sound-btn').classList.add('sound-muted');
+});
+
+/* ═══════════════════════════════════════════════════════
+   ⚔️ GHOST RACE MODE
+   — Records word timestamps of best run, races against it
+═══════════════════════════════════════════════════════ */
+let ghostBestRun = JSON.parse(localStorage.getItem('tf-ghost-best') || 'null');
+// ghostBestRun = { level, mode, wordTimes:[], totalWords, finalWPM }
+let ghostWordTimes = []; // current run word completion timestamps (ms from start)
+let ghostRaceActive = false;
+
+function startGhostRace() {
+  const key = level + '_' + gameMode;
+  const stored = JSON.parse(localStorage.getItem('tf-ghost-' + key) || 'null');
+  ghostWordTimes = [];
+  if (stored && stored.wordTimes && stored.wordTimes.length > 3) {
+    ghostBestRun = stored;
+    ghostRaceActive = true;
+    const bar = document.getElementById('ghost-bar');
+    bar.classList.add('active');
+    document.getElementById('ghost-delta').textContent = '👻 ' + stored.finalWPM + ' WPM';
+    document.getElementById('ghost-delta').className = 'ghost-delta';
+  } else {
+    ghostRaceActive = false;
+    document.getElementById('ghost-bar').classList.remove('active');
+  }
+}
+
+function recordGhostWord(wi) {
+  if (!startTime) return;
+  ghostWordTimes.push(Date.now() - startTime);
+  if (ghostRaceActive) updateGhostUI(wi);
+}
+
+function updateGhostUI(wi) {
+  if (!ghostBestRun || !ghostRaceActive) return;
+  const total = Math.max(ghostBestRun.wordTimes.length, words.length, 1);
+  const youPct  = Math.min(100, (wi / total) * 100);
+  const elapsed = Date.now() - startTime;
+  // find where ghost would be at this elapsed time
+  let ghostWi = 0;
+  for (let i = 0; i < ghostBestRun.wordTimes.length; i++) {
+    if (ghostBestRun.wordTimes[i] <= elapsed) ghostWi = i + 1;
+    else break;
+  }
+  const ghostPct = Math.min(100, (ghostWi / total) * 100);
+  document.getElementById('ghost-you').style.left  = youPct + '%';
+  document.getElementById('ghost-them').style.left = ghostPct + '%';
+  const diff = wi - ghostWi;
+  const deltaEl = document.getElementById('ghost-delta');
+  if (diff > 0)      { deltaEl.textContent = '+' + diff + ' words'; deltaEl.className = 'ghost-delta ahead'; }
+  else if (diff < 0) { deltaEl.textContent = diff + ' words';        deltaEl.className = 'ghost-delta behind'; }
+  else               { deltaEl.textContent = 'Tied!';                 deltaEl.className = 'ghost-delta'; }
+}
+
+function saveGhostRun(finalWPM) {
+  if (ghostWordTimes.length < 5) return;
+  const key = level + '_' + gameMode;
+  const existing = JSON.parse(localStorage.getItem('tf-ghost-' + key) || 'null');
+  if (!existing || finalWPM > existing.finalWPM) {
+    const run = { level, mode: gameMode, wordTimes: ghostWordTimes, totalWords: wordIndex, finalWPM };
+    localStorage.setItem('tf-ghost-' + key, JSON.stringify(run));
+    if (!existing) showToast('👻 Ghost saved! আপনার run এখন ghost হিসেবে record হয়েছে', 3000);
+    else showToast('👻 New ghost record! ' + finalWPM + ' WPM 🔥', 3000);
+  }
+}
+
+/* ═══════════════════════════════════════════════════════
+   🎭 MOOD-BASED THEME SHIFTER
+   — calm (low wpm) → flow (mid) → intense (high/error)
+═══════════════════════════════════════════════════════ */
+let currentMood = 'calm';
+
+function updateMood() {
+  if (!running) return;
+  const wpm = calcWPM(); const acc = calcAcc();
+  let mood;
+  if (wpm >= 60 && acc >= 90)       mood = 'intense';
+  else if (wpm >= 35 && acc >= 80)  mood = 'flow';
+  else                               mood = 'calm';
+  if (mood === currentMood) return;
+  currentMood = mood;
+  document.body.className = document.body.className.replace(/mood-\w+/g,'').trim() + ' mood-' + mood;
+  const pill = document.getElementById('mood-pill');
+  const labels = {calm:'😌 Calm', flow:'🌊 Flow', intense:'⚡ Intense'};
+  pill.textContent  = labels[mood];
+  pill.className    = 'mood-pill ' + mood;
+}
+
+setInterval(()=>{ if(running) updateMood(); }, 3000);
+
+/* ═══════════════════════════════════════════════════════
+   📅 DAILY STREAK CALENDAR
+   — GitHub-style 3-month heatmap from localStorage
+═══════════════════════════════════════════════════════ */
+function getTodayKey() {
+  const d = new Date(); return d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+}
+function recordTodayActivity(wpm) {
+  const key = 'tf-cal-' + getTodayKey();
+  const prev = JSON.parse(localStorage.getItem(key)||'{"tests":0,"bestWPM":0}');
+  prev.tests++;
+  if (wpm > prev.bestWPM) prev.bestWPM = wpm;
+  localStorage.setItem(key, JSON.stringify(prev));
+}
+function openStreak() {
+  buildCalendar();
+  document.getElementById('streak-modal-overlay').classList.add('show');
+}
+function closeStreak() {
+  document.getElementById('streak-modal-overlay').classList.remove('show');
+}
+function buildCalendar() {
+  const today = new Date(); today.setHours(0,0,0,0);
+  const DAYS = 84; // 12 weeks
+  const days = [];
+  for (let i = DAYS-1; i >= 0; i--) {
+    const d = new Date(today); d.setDate(d.getDate() - i);
+    const key = 'tf-cal-' + d.getFullYear()+'-'+(d.getMonth()+1)+'-'+d.getDate();
+    const data = JSON.parse(localStorage.getItem(key)||'null');
+    days.push({ date: d, data, isToday: i===0 });
+  }
+  // streak calc
+  let currentStreak=0, longestStreak=0, totalDays=0, tmp=0;
+  for (let i=days.length-1;i>=0;i--) {
+    if (days[i].data) { if(i===days.length-1||days[i+1]?.data) { currentStreak++; } else break; }
+    else break;
+  }
+  days.forEach(d=>{ if(d.data){tmp++;totalDays++;longestStreak=Math.max(longestStreak,tmp);}else tmp=0; });
+  document.getElementById('st-current').textContent = currentStreak + (currentStreak===1?' day':' days');
+  document.getElementById('st-longest').textContent = longestStreak + (longestStreak===1?' day':' days');
+  document.getElementById('st-total').textContent   = totalDays;
+
+  // month labels
+  const monthGrid = document.getElementById('cal-months');
+  const seenMonths = new Set();
+  const monthNames = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  monthGrid.innerHTML = days.filter((_,i)=>i%7===0).map(d=>{
+    const m = d.date.getMonth();
+    if (!seenMonths.has(m)) { seenMonths.add(m); return `<div class="cal-month-lbl">${monthNames[m]}</div>`; }
+    return '<div class="cal-month-lbl"></div>';
+  }).join('');
+
+  // day cells
+  const grid = document.getElementById('cal-grid');
+  grid.innerHTML = days.map(d=>{
+    const tests = d.data?.tests || 0;
+    const lvl = tests===0?'d0':tests===1?'d1':tests<=3?'d2':tests<=6?'d3':'d4';
+    const todayCls = d.isToday ? ' today' : '';
+    const title = d.data ? `${d.date.toDateString()}: ${tests} tests, best ${d.data.bestWPM} WPM` : d.date.toDateString();
+    return `<div class="cal-day ${lvl}${todayCls}" title="${title}"></div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   🔬 MICRO-ANALYSIS — word-by-word timing breakdown
+═══════════════════════════════════════════════════════ */
+let wordTimingLog = []; // [{word, startMs, endMs, correct}]
+let wordStartTime = 0;
+
+function onWordStart() { wordStartTime = Date.now(); }
+function onWordEnd(word, correct) {
+  const elapsed = (Date.now() - wordStartTime) / 1000;
+  wordTimingLog.push({ word, time: elapsed, correct });
+  wordStartTime = Date.now();
+}
+
+function openMicro() {
+  if (!wordTimingLog.length) { showToast('প্রথমে একটি test শেষ করুন', 2000); return; }
+  buildMicroModal();
+  document.getElementById('micro-modal-overlay').classList.add('show');
+}
+function closeMicro() { document.getElementById('micro-modal-overlay').classList.remove('show'); }
+
+function buildMicroModal() {
+  const log = wordTimingLog;
+  const avgTime = log.reduce((s,w)=>s+w.time,0)/log.length;
+  const slowest = log.reduce((a,b)=>b.time>a.time?b:a,log[0]);
+  const fastest = log.reduce((a,b)=>b.time<a.time?b:a,log[0]);
+  const errCount = log.filter(w=>!w.correct).length;
+
+  document.getElementById('micro-summary').innerHTML = `
+    <div class="micro-sum-card"><div class="micro-sum-val">${avgTime.toFixed(2)}s</div><div class="micro-sum-lbl">Avg per Word</div></div>
+    <div class="micro-sum-card"><div class="micro-sum-val" style="color:var(--accent)">${fastest.time.toFixed(2)}s</div><div class="micro-sum-lbl">Fastest</div></div>
+    <div class="micro-sum-card"><div class="micro-sum-val" style="color:var(--accent3)">${slowest.time.toFixed(2)}s</div><div class="micro-sum-lbl">Slowest</div></div>
+  `;
+
+  document.getElementById('micro-word-list').innerHTML = log.map(w=>{
+    const cls = !w.correct ? 'mwc-err' : w.time > avgTime*1.6 ? 'mwc-slow' : 'mwc-ok';
+    return `<div class="micro-word-chip ${cls}">
+      <div class="mwc-word">${w.word}</div>
+      <div class="mwc-time">${w.time.toFixed(2)}s</div>
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════════════════
+   PATCH all existing game hooks for new features
+═══════════════════════════════════════════════════════ */
+// Override startTest again to add new systems
+const __origStart2 = window.startTest;
+window.startTest = function() {
+  __origStart2();
+  wordTimingLog = []; wordStartTime = 0;
+  startGhostRace();
+  updateMood();
+  document.body.classList.remove('mood-calm','mood-flow','mood-intense');
+  document.body.classList.add('mood-calm');
+  document.getElementById('mood-pill').textContent = '😌 Calm';
+  document.getElementById('mood-pill').className = 'mood-pill calm';
+};
+
+// Override endTest for ghost save, micro, calendar, sound
+const __origEnd2 = window.endTest;
+window.endTest = async function() {
+  sfxFinish();
+  await __origEnd2();
+  const finalWPM = calcWPM() || parseInt(document.getElementById('wpm-val').textContent) || 0;
+  saveGhostRun(finalWPM);
+  recordTodayActivity(finalWPM);
+  document.getElementById('ghost-bar').classList.remove('active');
+};
+
+// Intercept space keydown capture for word timing + ghost + sound
+document.getElementById('typing-input').addEventListener('keydown', function(e) {
+  if (!running) return;
+  if (e.key === ' ') {
+    const tw = this.value.trim(); const cw = words[wordIndex];
+    if (!tw || !cw) return;
+    const correct = tw === cw;
+    onWordEnd(cw, correct);
+    recordGhostWord(wordIndex + 1);
+    if (correct) sfxCorrect(); else sfxError();
+    setTimeout(onWordStart, 10);
+  } else if (e.key.length === 1) {
+    sfxKeypress();
+  }
+}, false); // bubble after capture phase handlers
+
+// Also init wordStartTime when test starts
+const __oldInputHandler = document.getElementById('typing-input');
+__oldInputHandler.addEventListener('input', function() {
+  if (!running && wordStartTime === 0) wordStartTime = Date.now();
+}, false);
+
+// Patch showAchievementCard to add sound
+const __origAchCard = window.showAchievementCard;
+window.showAchievementCard = function(ach) {
+  sfxAchieve();
+  __origAchCard(ach);
+};
+
+// init mood
+document.body.classList.add('mood-calm');
 
 /* init */
 updateModeBadge();
